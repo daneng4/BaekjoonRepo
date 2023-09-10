@@ -1,93 +1,77 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.IOException;
-import java.util.StringTokenizer;
- 
+import java.io.*;
+import java.util.*;
+
+
 public class Main {
-	
-	static int N;
-	static int[][] map;
-	static boolean[] visit;
-	
-	static int Min = Integer.MAX_VALUE;
-	
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
- 
-		N = Integer.parseInt(br.readLine());
- 
-		map = new int[N][N];
-		visit = new boolean[N];
- 
- 
-		for (int i = 0; i < N; i++) {
-			StringTokenizer st = new StringTokenizer(br.readLine(), " ");
- 
-			for (int j = 0; j < N; j++) {
-				map[i][j] = Integer.parseInt(st.nextToken());
-			}
-		}
- 
-		combi(0, 0);
-		System.out.println(Min);
- 
-	}
- 
-	// idx는 인덱스, count는 조합 개수(=재귀 깊이)
-	static void combi(int idx, int count) {
-		// 팀 조합이 완성될 경우
-		if(count == N / 2) {
-			/*
-			 방문한 팀과 방문하지 않은 팀을 각각 나누어
-			 각 팀의 점수를 구한 뒤 최솟값을 찾는다.
-			*/
-			diff();
-			return;
-		}
- 
-		for(int i = idx; i < N; i++) {
-			// 방문하지 않았다면?
-			if(!visit[i]) {
-				visit[i] = true;	// 방문으로 변경
-				combi(i + 1, count + 1);	// 재귀 호출
-				visit[i] = false;	// 재귀가 끝나면 비방문으로 변경
-			}
-		}
-	}
- 
-	// 두 팀의 능력치 차이를 계산하는 함수 
-	static void diff() {
-		int team_start = 0;
-		int team_link = 0;
- 
-		for (int i = 0; i < N - 1; i++) {
-			for (int j = i + 1; j < N; j++) {
-				// i 번째 사람과 j 번째 사람이 true라면 스타트팀으로 점수 플러스 
-				if (visit[i] == true && visit[j] == true) {
-					team_start += map[i][j];
-					team_start += map[j][i];
-				}
-				// i 번째 사람과 j 번째 사람이 false라면 링크팀으로 점수 플러스 
-				else if (visit[i] == false && visit[j] == false) {
-					team_link += map[i][j];
-					team_link += map[j][i];
-				}
-			}
-		}
-		// 두 팀의 점수 차이 (절댓값)
-		int val = Math.abs(team_start - team_link);
-		
-		/*
-		  두 팀의 점수차가 0이라면 가장 낮은 최솟값이기 때문에
-		  더이상의 탐색 필요없이 0을 출력하고 종료하면 된다.
-		 */
-		if (val == 0) {
-			System.out.println(val);
-			System.exit(0);
-		}
-		
-		Min = Math.min(val, Min);
-				
-	}
- 
+
+    static int[][] map; // 능력치 표 배열
+    static int n; // 모인 사람 수
+    static boolean[] visited; // 방문 정보 저장 배열
+    static int min = Integer.MAX_VALUE; // 최소 값을 저장하기 위해 정수 최대 값 저장
+    
+    public static void main(String[] args) throws IOException{
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        
+        n = Integer.parseInt(br.readLine());
+        map = new int[n][n];
+        visited = new boolean[n];
+
+        // 능력치 표 배열에 능력치들 입력하기
+        for(int i = 0; i<n; i++){
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            for(int j = 0; j<n; j++){
+                map[i][j] = Integer.parseInt(st.nextToken());
+            }
+        }
+
+        function(0,0);
+        System.out.println(min);
+    }
+    static void function(int index, int count){
+        if(count == n/2){
+            // count == n/2 ---> 팀 구성이 완료된 시점
+            getDiff(); // 팀원 전력차를 구하기 위한 메서드
+            return; // 재귀 함수 탈출
+        }
+
+        for(int i=index; i<n; i++){
+            if(!visited[i]){ // 만약 해당 index 선수를 방문(팀으로 영입) 하지 않았다면
+                visited[i] = true; // 방문 처리를 해주고
+                function(i+1, count+1);
+                visited[i] = false; // 연산을 마치고 비 방문 (false) 처리
+            }
+        }
+    }
+
+    static void getDiff(){
+
+        int start = 0; // 각 팀의 전투력을 더하기 위한 변수
+        int link = 0;
+
+        // pair 전투력 측정은 언제나 2명씩 되기 마련
+        // 1,2,3 팀이면 (1,2) (2,3) (1,3)..
+        for(int i = 0; i < n-1; i++){
+            for(int j = i+1; j < n; j++){
+                if(visited[i] && visited[j]){ // visited = true인 선수는 start팀
+                    start += map[i][j];
+                    start += map[j][i];
+                }else if(!visited[i] && !visited[j]){ // 그 외 선수는 link팀
+                    link += map[i][j];
+                    link += map[j][i];
+                }
+            }
+        }
+
+        //만약 이미 전투력 차가 0인 경우
+        int val = Math.abs(start - link);
+        if (val == 0) {
+            System.out.println(val);
+            System.exit(0);
+        }
+
+        // 아니면 전역 변수로 선언한 최솟값 min을 갱신한다
+        min = Math.min(val, min);
+
+    }
 }
