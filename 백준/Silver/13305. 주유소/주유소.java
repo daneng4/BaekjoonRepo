@@ -17,24 +17,19 @@ public class Main  {
         for(int i = 0; i<n-1; i++){
             far[i] = Integer.parseInt(st.nextToken());
         }
-
-        int min = Integer.MAX_VALUE;
-
+        
         st = new StringTokenizer(br.readLine());
         for(int i = 0; i<n; i++){
             cost[i] = Integer.parseInt(st.nextToken());
-            if(cost[i] < min)
-                min = cost[i];
+            if(i >= 1 && cost[i-1] < cost[i])
+                cost[i] = cost[i-1];
+
         }
 
         for(int i = 0; i<n-1; i++){
-            if(cost[i] < cost[i+1]) {
-                result += cost[i] * (far[i] + far[i + 1]);
-                i+=1;
-            }
-            else
-                result += cost[i] * far[i];
+            result += cost[i] * far[i];
         }
+
         System.out.println(result);
 
     }
