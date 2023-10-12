@@ -1,32 +1,32 @@
-import java.util.*;
-import java.io.*;
-import java.math.*;
-
-import static java.lang.System.exit;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
 
 public class Main {
 
-    public static int n;
-    public static long[] arr;
-    public static void main(String[] args) throws Exception{
+    static long[] arr;
+
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        n = Integer.parseInt(br.readLine());
-        arr = new long[n+2];
-        arr[0] = 0;
-        arr[1] = 1;
-        if(n == 0){
-            System.out.println(arr[0]);
-            exit(0);
-        }else if (n==1){
-            System.out.println(arr[1]);
-            exit(0);
+        int N = Integer.parseInt(br.readLine());
+
+        arr = new long[N + 1];
+
+        for(int i = 0; i < N + 1; i++) {
+            arr[i] = -1;
         }
 
-        for(int i = 2; i<=n; i++){
-            arr[i] = arr[i-1] + arr[i-2];
-            if(n == i)
-                System.out.println(arr[i]);
-        }
+        arr[0] = 0;
+        arr[1] = 1;
+        System.out.println(Fib(N));
     }
+
+    public static long Fib(int N) {
+        if(arr[N] == -1) {
+            arr[N] = Fib(N - 1) + Fib(N - 2);
+        }
+        return arr[N];
+    }
+
 }
