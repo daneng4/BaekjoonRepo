@@ -1,34 +1,32 @@
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
 public class Main {
 
-	public static void main(String[] args) {
-		 Scanner s = new Scanner(System.in); 
-		 int N = s.nextInt(); 				
-		 int temp; 							
-		 int array[] = new int[N]; 			
-		 
-		 for (int i = 0; i<N; i++) { 		
-			 array[i] = s.nextInt(); 		
-		 }
-		
-		 
-		 
-		 for (int i = 0; i<N-1; i++) { 		
-			 for(int j = i+1; j<N; j++) { 	
-				 if(array[i] > array[j]) { 	
-					 temp = array[i]; 		
-					 array[i] = array[j]; 	
-					 array[j] = temp;		
-				 }
-			 }
+    public static int[] arr;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-		 }
-		 for (int i = 0; i<array.length; i++) { 
-			 System.out.println(array[i]);
-		 }
-		 s.close();
-		 
-	}
+        int n = Integer.parseInt(br.readLine());
+        arr = new int[n];
 
+        for(int i = 0; i<n; i++){
+            arr[i] = Integer.parseInt(br.readLine());
+        }
+
+        for(int i = 0; i<n-1; i++){
+            for(int j = i+1; j<n; j++){
+                if(arr[i] > arr[j]){
+                    int temp = arr[i];
+                    arr[i] = arr[j];
+                    arr[j] = temp;
+                }
+            }
+        }
+
+        for(int i = 0; i<arr.length; i++){
+            System.out.println(arr[i]);
+        }
+
+    }
 }
