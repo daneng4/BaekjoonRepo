@@ -1,27 +1,26 @@
-import java.util.Scanner;
+
+import java.util.*;
+import java.io.*;
 
 public class Main {
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-		Scanner sc = new Scanner(System.in);
-		int fn = sc.nextInt(); // 시험을 본 과목의 개수
-		int scores[] = new int[fn];
-		long max=0;
-		long sum=0;
-		
-		for(int i = 0; i< fn; i++) {
-			scores[i] = sc.nextInt();
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int n = Integer.parseInt(br.readLine());
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		double[] arr = new double[n];
+		for(int i = 0; i<n; i++) {
+			arr[i] = Integer.parseInt(st.nextToken());
+		}
+		Arrays.sort(arr);
+		int max = (int)arr[arr.length-1];
+		double sum = 0;
+		for(int i = 0; i<n; i++) {
+			sum += arr[i]/max*100;
 		}
 		
-		for(int i = 0; i< scores.length; i++) {
-			if (scores[i] > max) {
-				max = scores[i];
-			}
-			sum = sum + scores[i];
-		}
-		System.out.println(sum*100.0/max/fn);
+		System.out.println(sum / n);
+		
 	}
 
 }
