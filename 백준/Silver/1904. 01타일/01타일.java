@@ -1,4 +1,3 @@
-
 import java.util.*;
 import java.io.*;
 
@@ -8,7 +7,7 @@ public class Main {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
 		int n = Integer.parseInt(br.readLine());
-		dp = new int[1000001];
+		dp = new int[n+2];
 		
 		dp[0] = 0;
 		dp[1] = 1;
