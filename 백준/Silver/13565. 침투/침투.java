@@ -24,9 +24,9 @@ public class Main {
 			for(int j = 0; j<mapInfo.length; j++) {
 				
 				int info = Integer.parseInt(mapInfo[j]);
-				if(i == 0)
+				if(i == 0 && info == 0)
 					outer.add(new int[] {i,j});
-				if(i == n-1)
+				if(i == n-1 && info == 0)
 					inner.add(new int[] {i,j});
 				
 				map[i][j] = info;
