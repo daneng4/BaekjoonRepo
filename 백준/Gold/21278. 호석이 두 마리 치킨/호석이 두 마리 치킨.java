@@ -1,88 +1,92 @@
-
-import java.util.*;
 import java.io.*;
-import java.math.BigInteger;
-
+import java.util.*;
 public class Main {
-	static ArrayList<Integer>[] map;
-	static boolean[] visit;
-	static int[] cost;
-	static int n,m;
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		
-		n = Integer.parseInt(st.nextToken());
-		m = Integer.parseInt(st.nextToken());
-		
-		map = new ArrayList[n+1];
-		visit = new boolean[n+1];
-		cost = new int[n+1];
-		
-		for(int i = 1; i<=n; i++) {
-			cost[i] = Integer.MAX_VALUE;
-		}
-		
-		for(int i = 1; i<=n; i++) {
-			map[i] = new ArrayList<>();
-		}
-		
-		// 양방향 건물 도로 정보 저장
-		for(int i = 0; i<m; i++) {
-			st = new StringTokenizer(br.readLine());
-			int a = Integer.parseInt(st.nextToken());
-			int b = Integer.parseInt(st.nextToken());
-			
-			map[a].add(b);
-			map[b].add(a);
-		}
-		int c1, c2;
-		PriorityQueue<info> pq = new PriorityQueue<>();
-		// 임의의 두 건물을 치킨집으로 지정
-		for(int i = 1; i<n; i++) {
-			for(int j = i+1; j<=n; j++) {
-				c1 = i; c2 = j;
-				int sum = 0;
-				for(int k = 1; k<=n; k++) {
-					if(k == c1 || k == c2)
-						continue;
-					solve(c1, c2, k, k, 0);
-					sum += cost[k];
-				}
-				pq.offer(new info(c1, c2, sum * 2));
-			}
-		}
-		StringBuilder sb = new StringBuilder();
-		info answer = pq.poll();
-		sb.append(answer.c1).append(" ").append(answer.c2).append(" ").append(answer.w);
-		System.out.println(sb);
-	}
-	public static void solve(int c1, int c2, int start, int cur, int c) {
-		// 치킨집 둘중 하나에 도착했을 때
-		if(cur == c1 || cur == c2) {
-			// 지금까지 걸린 비용을 갱신
-			cost[start] = Math.min(cost[start], c);
-			return;
-		}
-		
-		visit[cur] = true;
-		for(int i = 1; i<=n; i++) {
-			if(!visit[i])
-				solve(c1, c2, start, i, c+1);
-		}
+    static int[][] floyd;
+    static int N, M;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        
+        StringTokenizer st1 = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st1.nextToken());
+        M = Integer.parseInt(st1.nextToken());
 
-	}
-}
-class info implements Comparable<info>{
-	int c1;
-	int c2;
-	int w;
-	info(int c1, int c2, int w){
-		this.c1 = c1;
-		this.c2 = c2;
-		this.w = w;
-	}
-	public int compareTo(info i) {
-		return this.c2 - i.c2;
-	}
+        floyd = new int[N][N];
+        
+        for(int i = 0 ; i < N ; i++) {
+            for(int j = 0 ; j < N ; j++) {
+                floyd[i][j] = 101; //점의 최대 개수는 100개이므로, 점과 점은 아무리 멀어도 거리 99가 최대임.
+                //즉, 거리 101로 해주는 것은 다익스트라의 Integer.MAX_VALUE와 같음.
+            }
+        }
+        //존재하는 길이 없다. 를 101 로 표현.
+        //있으면, 거리는 전부 1이니 해당 값 넣기
+        
+        for(int i = 0 ; i < M ; i++) {
+            StringTokenizer st2 = new StringTokenizer(br.readLine());
+            int a = Integer.parseInt(st2.nextToken());
+            int b = Integer.parseInt(st2.nextToken());
+            floyd[a-1][b-1] = 1;
+            floyd[b-1][a-1] = 1;
+        }
+        //초깃값.
+
+        for(int i = 0 ; i < N ; i++) {
+            for(int j = 0 ; j < N ; j++) {
+                if(i == j) continue;
+                for(int k = 0 ; k < N ; k++) {
+                    if(i == k || j == k) continue;
+                    
+                    if(floyd[j][k] > floyd[j][i] + floyd[i][k]) floyd[j][k] = floyd[j][i] + floyd[i][k];
+                    
+                }
+            }
+        }
+        
+        //플로이드 워셜로 각 점에서 각 점까지의 거리의 최솟값 다 채운 후
+        //플로이드 워셜 로직 = a->c로 가는 값보다 b를 거쳐 a->b + b->c 값이 더 작다면 작은 값을 택하는 알고리즘.
+        
+        int min = Integer.MAX_VALUE;
+        int n1 = 0;
+        int n2 = 0;
+
+        for(int i = 0 ; i < N ; i++) {
+            for(int j = 0 ; j < N ; j++) {
+                if(i == j) continue;
+                //두 점을 고른다. (1, 2부터 N-1, N까지)
+
+                int now = sum(i, j);
+                //고른 두 점을 기준으로 각각의 점의 거리의 최솟값을 더해나간다.
+                //1, 2를 골랐으면
+                //sum(1, 2) = 그 둘(1, 2)에서 3까지의 거리의 최솟값 + ... + 그 둘(1, 2)에서 N 까지의 거리의 최솟값
+
+                if(min > now) {
+                    n1 = i+1;
+                    n2 = j+1;
+                    min = now;
+                }
+                //해당 값이 최솟값이 된다면 두 점을 기록해놓는다.
+
+            }
+        }
+
+        //기록한 두 점과 최솟값을 출력한다.
+        bw.write(String.valueOf(n1) + " " + String.valueOf(n2) + " " + String.valueOf(min*2)); //min*2는 왕복이라서.
+        bw.flush();
+        bw.close();
+
+
+    }
+
+    static int sum(int n1, int n2) {
+        int sum = 0;
+        for(int i = 0 ; i < N ; i++) {
+            if(i == n1 || i == n2) continue;
+            sum += Math.min(floyd[n1][i], floyd[n2][i]);
+        }
+
+        return sum;
+    }
+
+
 }
