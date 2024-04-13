@@ -2,99 +2,79 @@
 import java.util.*;
 import java.io.*;
 
-/*
- * 다익스트라
- * 방문하지 않은 노드 중 가장 비용이 적은 노드를 선택
- * 해당 노드로부터 갈 수 있는 노드들의 비용을 갱신
-*/
 public class Main {
-	public static int [] ans;
-    public static boolean [] visit;
-    public static ArrayList<Node>[] nodes;
+	static ArrayList<Node>[] list;
+	static boolean[] visit;
+	static int[] ans;
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		StringTokenizer st = new StringTokenizer(br.readLine());
-
-		int V = Integer.parseInt(st.nextToken());
-		int E = Integer.parseInt(st.nextToken());
-	
-		int K = Integer.parseInt(br.readLine()); // 시작 정점 K
-		ans = new int[V+1];
-		visit = new boolean[V+1];
-		nodes = new ArrayList[V+1];
 		
-		for(int i = 1; i<=V; i++) {
-			nodes[i] = new ArrayList<>();
+		int v = Integer.parseInt(st.nextToken());
+		int e = Integer.parseInt(st.nextToken());
+		int start = Integer.parseInt(br.readLine());
+		visit = new boolean[v+1];
+		list = new ArrayList[v+1];
+		ans = new int[v+1];
+		for(int i = 1; i<=v; i++) {
+			list[i] = new ArrayList<>();
 		}
-		
-		for(int i = 1; i<=V; i++) {
+		for(int i = 1; i<=v; i++) {
 			ans[i] = Integer.MAX_VALUE;
 		}
 		
-		// u,v,w -> u에서 v로 가는 가중치가 w인 간선 정보
-		for(int i = 0; i<E; i++) {
+		for(int i = 0; i<e; i++) {
 			st = new StringTokenizer(br.readLine());
-			int u = Integer.parseInt(st.nextToken());
-			int v = Integer.parseInt(st.nextToken());
-			int w = Integer.parseInt(st.nextToken());
+			int a = Integer.parseInt(st.nextToken());
+			int b = Integer.parseInt(st.nextToken());
+			int c = Integer.parseInt(st.nextToken());
 			
-			nodes[u].add(new Node(v, w)); // u라는 노드에서 v노드까지의 가중치 정보 저장
+			list[a].add(new Node(b, c));
 		}
-		
-		ans[K] = 0; // 시작노드 0 초기화
-		dijkstra(K);
+		ans[start] = 0;
+		algo(start);
 		
 		StringBuilder sb = new StringBuilder();
-		for(int i = 1; i<=V; i++) {
-			if(i == K)
-				sb.append(0 + "\n");
+		for(int i = 1; i<=v; i++) {
+			if(i == start)
+				sb.append("0\n");
 			else if(ans[i] == Integer.MAX_VALUE)
 				sb.append("INF\n");
 			else
-				sb.append(ans[i] + "\n");
+				sb.append(ans[i]).append("\n");
 		}
 		System.out.println(sb);
 	}
-	
-	public static void dijkstra(int start) {
-		// 가중치가 작은 순서로 뽑기 위해 우선순위 큐 사용
+	public static void algo(int start) {
 		PriorityQueue<Node> pq = new PriorityQueue<>();
 		pq.add(new Node(start, 0));
 		
 		while(!pq.isEmpty()) {
-			// 방문하지 않은 노드 중 가장 작은 노드 선택
-			Node curNode = pq.poll();
-			// 방문했다면 continue
-			if(visit[curNode.value])
+			Node cur = pq.poll();
+			if(visit[cur.end])
 				continue;
+			visit[cur.end] = true; 
 			
-			visit[curNode.value] = true;
-			
-			// 해당 노드로부터 갈 수 있는 다른 노드들의 가중치 최소 비용을 갱신한다.
-			for(Node node : nodes[curNode.value]) {
-				if(ans[node.value] > ans[curNode.value] + node.weight) {
-					ans[node.value] = ans[curNode.value] + node.weight; 
-					pq.add(new Node(node.value, ans[node.value]));
+			for(Node n : list[cur.end]) {
+				if(ans[n.end] > ans[cur.end] + n.weight) {
+					ans[n.end] = ans[cur.end] + n.weight;  
+					pq.add(new Node(n.end, ans[n.end]));
 				}
 			}
+			
 		}
+		
 	}
-	
 }
-
 class Node implements Comparable<Node>{
-	int value;
-	int weight; 
-	
-	Node(int value, int weight){
-		this.value = value;
+	int end;
+	int weight;
+	public Node(int end, int weight) {
+		this.end = end;
 		this.weight = weight;
 	}
-
-	@Override
-	public int compareTo(Node o) {
-		return weight - o.weight;
+	public int compareTo(Node n) {
+		return weight - n.weight;
 	}
-	
 }
-
