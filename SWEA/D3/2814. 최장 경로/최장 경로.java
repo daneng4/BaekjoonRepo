@@ -35,7 +35,8 @@ public class Solution {
 			
 			answer = 0;
 			for(int i = 1; i<=n; i++) {
-				dfs(i, 0);
+				Arrays.fill(visit, false);
+				dfs(i, 1);
 			}
 			
 			bw.write(String.format("#%d %d\n", t, answer));
@@ -44,6 +45,7 @@ public class Solution {
 	}
 	public static void dfs(int start, int depth) {
 		answer = Math.max(answer, depth);
+		visit[start] = true;
 		
 		for(int next : list[start]) {
 			if(visit[next])
