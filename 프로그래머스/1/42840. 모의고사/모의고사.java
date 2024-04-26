@@ -1,30 +1,35 @@
 import java.util.*;
 class Solution {
-    public int[] solution(int[] answers) {
-        List<Integer> result = new ArrayList<>();
-		
-		int[] one = {1, 2, 3, 4, 5};
-		int[] two = {2, 1, 2, 3, 2, 4, 2, 5};
-		int[] thr = {3, 3, 1, 1, 2, 2, 4, 4, 5, 5};
-		int[] score = {0,0,0};
-        int[] answer = {};
+    public ArrayList<Integer> solution(int[] answers) {
+        ArrayList<Integer> answer = new ArrayList<>();
         
-        for(int i=0; i<answers.length; i++) {
-            if(answers[i] == one[i%5]) score[0]++;
-            if(answers[i] == two[i%8]) score[1]++;
-            if(answers[i] == thr[i%10]) score[2]++;
-        }
+        int[] p1 = {1,2,3,4,5};
+        int[] p2 = {2,1,2,3,2,4,2,5};
+        int[] p3 = {3,3,1,1,2,2,4,4,5,5};
         
-        int max = Math.max(score[0], Math.max(score[1], score[2]));
-        for(int i = 0; i<score.length; i++){
-            if(max == score[i])
-                result.add(i+1);
+        int p1s = 0; int p2s = 0; int p3s = 0;
+        for(int i = 0; i<answers.length; i++){
+            if(answers[i] == p1[i % p1.length]){
+                p1s++;
+            }
+            if(answers[i] == p2[i % p2.length]){
+                p2s++;
+            }
+            if(answers[i] == p3[i % p3.length]){
+                p3s++;
+            }
         }
-        answer = new int[result.size()];
-        for(int i = 0; i<result.size(); i++){
-            answer[i] = result.get(i);
-        }
-		
+        int max = 0;
+        max = Math.max(max, p1s);
+        max = Math.max(max, p2s);
+        max = Math.max(max, p3s);
+        if(max == p1s)
+            answer.add(1);
+        if(max == p2s)
+            answer.add(2);
+        if(max == p3s)
+            answer.add(3);
+        
         return answer;
     }
 }
