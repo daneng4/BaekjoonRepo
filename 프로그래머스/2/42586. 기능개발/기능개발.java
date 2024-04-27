@@ -1,45 +1,46 @@
 import java.util.*;
-
 class Solution {
-    public int[] solution(int[] progresses, int[] speeds) {
-        List<Integer> prog = new ArrayList<>();
-        List<Integer> spd = new ArrayList<>();
-        List<Integer> tmp;
-        List<Integer> result = new ArrayList<>();
+    public ArrayList<Integer> solution(int[] progresses, int[] speeds) {
+        ArrayList<Integer> answer = new ArrayList<>();
+        Stack<Integer> s = new Stack<>();
+        int max = 0;
+        int idx = 0;
         
-        for(int i = 0; i<progresses.length; i++){
-            prog.add(progresses[i]);
-            spd.add(speeds[i]);
-        }
-        
-        while(prog.size() != 0){
-            tmp = new ArrayList<>();
-            for(int i = 0; i<prog.size(); i++){
-                prog.set(i, prog.get(i) + spd.get(i));
+        for(int p : progresses){
+            int remain = (100 - p) / speeds[idx];
+            if((100-p) % speeds[idx] > 0)
+                remain+=1;
+            idx++;
+            
+            if(s.isEmpty()){
+                s.push(remain);
+                max = Math.max(remain, max);
             }
-            if(prog.get(0) < 100)
-            	continue;
-            int count = 0;
-            for(int i = 0; i<prog.size(); i++){
-                if(prog.get(i) >= 100){
-                    count++;
+            else{
+                
+                if(max >= remain){
+                    s.push(remain);
+                    max = Math.max(max, remain);
+                }else{
+                    int count = 0;
+                    while(!s.isEmpty()){
+                        s.pop();
+                        count++;
+                    }
+                    s.push(remain);
+                    max = remain;
+                    answer.add(count);
                 }
-                else
-                    break;
-            }
-            if(count >= 1) {
-            	for(int i = count-1; i>-1; i--) {
-            		prog.remove(i);
-            		spd.remove(i);
-            	}
-                result.add(count);
+                
             }
         }
-        int[] answer = new int[result.size()];
-        for(int i = 0; i<result.size(); i++){
-            answer[i] = result.get(i);
+        int last = 0;
+        while(!s.isEmpty()) {
+        	s.pop();
+        	last++;
+        	
         }
-        
+        answer.add(last);
         return answer;
     }
 }
