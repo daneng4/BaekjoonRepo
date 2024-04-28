@@ -3,10 +3,9 @@ class Solution {
     boolean solution(String s) {
         boolean answer = true;
         int size = 0;
-        char[] c = s.toCharArray();
         
-        for(int i = 0; i<c.length; i++){
-            if(c[i] == '('){
+        for(int i = 0; i<s.length(); i++){
+            if(s.charAt(i) == '('){
                 size++;
             }else{
                 size--;
