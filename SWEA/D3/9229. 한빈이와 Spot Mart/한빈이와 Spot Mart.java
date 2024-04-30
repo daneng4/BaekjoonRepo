@@ -13,28 +13,31 @@ public class Solution {
         	StringTokenizer st = new StringTokenizer(br.readLine());
         	int n = Integer.parseInt(st.nextToken());
         	int m = Integer.parseInt(st.nextToken());
-        	int[] snack = new int[n];
-        	
+        	int[] s = new int[n];
         	st = new StringTokenizer(br.readLine());
-        	for(int i = 0; i<n; i++) {
-        		snack[i] = Integer.parseInt(st.nextToken());
-        	}
         	
-        	int answer = 0;
         	for(int i = 0; i<n; i++) {
-        		for(int j = 0; j<n; j++) {
-        			if(i==j) continue;
-        			int sum = snack[i] + snack[j];
-        			if(sum <= m)
-        				answer = Math.max(answer, sum);
+        		s[i] = Integer.parseInt(st.nextToken());
+        	}
+        	Arrays.sort(s);
+        	int start = 0; int end = s.length-1;
+        	int answer = -1;
+        	while(start < end) {
+        		int sum = s[start] + s[end];
+        		
+        		if(sum == m) {
+        			answer = sum;
+        			break;
+        		}else if (sum > m) {
+        			end -= 1;
+        		}else {
+        			answer = Math.max(answer, sum);
+        			start += 1;
         		}
         	}
-        	if(answer == 0)
-        		bw.write(String.format("#%d -1\n", t));
-        	else
-        		bw.write(String.format("#%d %d\n", t, answer));
+        	
+    		bw.write(String.format("#%d %d\n", t, answer));
         }
         bw.flush();
-        
     }
 }
