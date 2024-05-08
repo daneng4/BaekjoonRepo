@@ -1,40 +1,37 @@
 
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
 public class Main {
-	static int[] weight;
-	static int[] value;
-	static Integer[][] dp;
-	static int n, k;
-	public static void main(String[] args) throws Exception  {
+	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		n = Integer.parseInt(st.nextToken());
-		k = Integer.parseInt(st.nextToken());
+		int n = Integer.parseInt(st.nextToken());
+		int k = Integer.parseInt(st.nextToken());
 		
-		weight = new int[n];
-		value = new int[n];
-		dp = new Integer[n][k+1];
-		for(int i = 0; i<n; i++) {
+		int[] w = new int[n+1];
+		int[] v = new int[n+1];
+		int[][] dp = new int[n+1][k+1];
+		
+		for(int i = 1; i<=n; i++) {
 			st = new StringTokenizer(br.readLine());
-			weight[i] = Integer.parseInt(st.nextToken());
-			value[i] = Integer.parseInt(st.nextToken());
+			w[i] = Integer.parseInt(st.nextToken());
+			v[i] = Integer.parseInt(st.nextToken());
 		}
 		
-		System.out.println(find(n-1, k));
-	}
-
-	public static int find(int i, int k) {
-		if(i<0)
-			return 0;
-		if(dp[i][k]==null) {
-			if(weight[i] > k) {
-				dp[i][k] = find(i-1, k);
-			}else {
-				dp[i][k] = Math.max(find(i-1, k), find(i-1,k -weight[i])+value[i]);
+		for(int i = 1; i<=n; i++) {
+			for(int j = 1; j<=k; j++) {
+				// 만약 현재 무게가 현재 감당할 수 있는 무게보다 크면
+				// 이전 무게의 value를 가져온다 => 더이상 가방에 담을 수 없음
+				if(w[i] > j)
+					dp[i][j] = dp[i-1][j];
+				// 뭔가 더 담을 수 있다면 현재 무게와 동일한 이전 무게에 현재 무게, 현재 value를
+				// 더한 것을 비교하여 큰 값을 저장한다
+				else
+					dp[i][j] = Math.max(dp[i-1][j], dp[i-1][j-w[i]] + v[i]);
 			}
 		}
-		return dp[i][k];
+		
+		System.out.println(dp[n][k]);
 	}
 }
