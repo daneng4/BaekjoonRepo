@@ -45,14 +45,6 @@ public class Solution {
         
         bw.flush();
     }
-    public static int checkIdx0(int m) {
-    	int result = 0;
-    	for(int i = 0; i<m; i++) {
-    		if(map[0][i] != 'W')
-    			result++;
-    	}
-    	return result;
-    }
     public static void solve(Queue<flag> q) {
     	while(!q.isEmpty()) {
     		int total = 0;
