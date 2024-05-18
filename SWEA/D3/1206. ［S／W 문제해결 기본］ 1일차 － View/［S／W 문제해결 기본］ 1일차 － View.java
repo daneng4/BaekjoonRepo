@@ -1,43 +1,43 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
 public class Solution {
-	static int[] d = {-2,-1,1,2};
-	static int result;
-	public static void main(String[] args) throws IOException {
+	static int[] arr;
+	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		
 		int testCase = 10;
-		
 		for(int t = 1; t<=testCase; t++) {
 			int n = Integer.parseInt(br.readLine());
-			int[] h = new int[n];
+			arr = new int[n+1];
 			StringTokenizer st = new StringTokenizer(br.readLine());
-			for(int i = 0; i<n; i++) {
-				h[i] = Integer.parseInt(st.nextToken());
+			
+			for(int i = 1; i<=n; i++) {
+				arr[i] = Integer.parseInt(st.nextToken());
 			}
 			
-			result = 0;
-			for(int i = 2; i<n-2; i++) {
-				result += find(h, i);
+			int answer = 0;
+			for(int i = 3; i<=n-2; i++) {
+				answer += check(i);
 			}
 			
-			bw.write(String.format("#%d %d\n", t, result));
+			bw.write(String.format("#%d %d\n", t, answer));
 		}
+		
 		bw.flush();
 	}
-	public static int find(int[] h, int curIdx) {
-		int value = Integer.MAX_VALUE;
-		for(int i = 0; i<4; i++) {
-			// 양수일 때 차의 최소 값
-			if(h[curIdx] - h[curIdx + d[i]] > 0) {
-				value = Math.min(value, h[curIdx] - h[curIdx + d[i]]);
-			} // 차가 음수면 나보다 높은 것, 조망권 없음
-			else {
-				return 0;
-			}
-		}
-		return value;
+	public static int check(int x) {
+		if(arr[x-2] >= arr[x]) 
+			return 0;
+		if(arr[x-1] >= arr[x])
+			return 0;
+		if(arr[x+1] >= arr[x])
+			return 0;
+		if(arr[x+2] >= arr[x])
+			return 0;
+		
+		int result = Math.max(arr[x-2], Math.max(arr[x-1], Math.max(arr[x+1], arr[x+2])));
+		return arr[x] - result;
 	}
 }
