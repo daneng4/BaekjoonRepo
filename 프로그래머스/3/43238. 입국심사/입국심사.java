@@ -9,23 +9,26 @@ class Solution {
     public long solution(int n, int[] times) {
         long answer = 0;
         
-        long end = Long.MAX_VALUE / 100;
+        Arrays.sort(times);
+        
+        long end = times[times.length-1] * (long)n;
         long start = 0;
         
-        while(start < end){
+        while(start <= end){
             long mid = (end+start)/2;
-            long result = check(mid, times);
-            if(n <= result){
-                end = mid;
-            }else
+            long result = check(mid, times, n);
+            if(result < n)
                 start = mid+1;
+            else{
+                answer = mid;
+                end = mid-1; 
+            }
         }
         
-        return start;
+        return answer;
     }
-    public static long check(long mid, int[] times){
+    public static long check(long mid, int[] times, int n){
         long count = 0;
-        
         for(int i = 0; i<times.length; i++){
             count += mid / times[i];
         }
