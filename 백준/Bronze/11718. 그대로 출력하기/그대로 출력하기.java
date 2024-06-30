@@ -1,4 +1,3 @@
-
 import java.io.*;
 import java.util.*;
 
@@ -7,14 +6,15 @@ public class Main {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder sb = new StringBuilder();
 		
-		while(true){
-		    String str = br.readLine();
-		    if (str == null || str.isEmpty()) {
-		        break;
-		    }
-		    sb.append(str).append("\n");
+		while(true) {
+			String input = br.readLine();
+			if(input == null || input.isEmpty()) {
+				break;
+			}
+			sb.append(input);
+			sb.append("\n");
 		}
-		br.close();
-		System.out.println(sb);
+		
+		System.out.println(sb.toString());
 	}
 }
