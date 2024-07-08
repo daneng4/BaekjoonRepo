@@ -1,19 +1,19 @@
 import java.util.*;
+
 class Solution {
     public int solution(String[][] clothes) {
-        int answer = 1;
-        HashMap<String,Integer> map = new HashMap<>();
+        
+        Map<String, Integer> map = new HashMap<>();
         
         for(String[] c : clothes){
-            String type = c[1];
-            map.put(type, map.getOrDefault(type, 0) + 1);
-        }
-
-        Set<String> key = map.keySet();
-        for(String k : key){
-            answer *= map.get(k) + 1;
+            map.put(c[1], map.getOrDefault(c[1], 0) + 1);
         }
         
-        return answer-1;
+        int sum = 1;  
+        for(String key : map.keySet()){
+            sum *= (map.get(key) + 1);
+        }
+        
+        return sum - 1;
     }
 }
