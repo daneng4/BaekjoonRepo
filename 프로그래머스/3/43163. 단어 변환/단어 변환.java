@@ -1,77 +1,74 @@
 import java.util.*;
-
+import java.io.*;
 class Solution {
-    static ArrayList<String> wordlist;
     static boolean[] visit;
+    static int answer = 0;
     public int solution(String begin, String target, String[] words) {
-        int answer = 0;
         
-        // 한번 바꿨던 단어로 다시 안바꾸기 위해 방문처리같은걸 해줘야함
-        // 한번에 한 단어만 바꿀수있기 때문에
-        // bfs탐색을 통해 처음의 begin단어와 한 단어만 다른 단어를 큐에 넣어주고
-        // 단계를 1개씩 증가시키면 될듯하다.
-        
-        wordlist = new ArrayList<>();
-        visit = new boolean[words.length];
-        for(String word : words){
-            wordlist.add(word);
+        // target이 words 내에 없으면 return 0
+        boolean exist = false;
+        for(String w : words){
+            if(w.equals(target)){
+                exist = true;
+            }
         }
-        
-        // words 에 target이 없으면 return 0
-        if(!wordlist.contains(target))
+        if(!exist)
             return 0;
         
-        answer = bfs(begin, target);
+        
+        // bfs 탐색으로 begin -> target 최소 변환 횟수를 찾는다
+        visit = new boolean[words.length];
+        bfs(begin, target, words);
         
         return answer;
     }
-    public static int bfs(String begin, String target){
-        int result = 987654321;
+    
+    public static void bfs(String begin, String target, String[] words){
         Queue<Info> q = new LinkedList<>();
         q.add(new Info(begin, 0));
-        // begin은 방문처리를 할 필요 없다
         
         while(!q.isEmpty()){
-            Info poll = q.poll();
-            String now = poll.word;
-            int curCount = poll.count;
+            Info info = q.poll();
+            String now = info.now;
+            int change = info.change;
             
             if(now.equals(target)){
-                result = Math.min(result, curCount);
+                answer = change;
+                break;
             }
             
-            for(int i = 0; i<wordlist.size(); i++){
-                String listword = wordlist.get(i);
-                // now와 listword가 단어 하나만 다를 경우 큐에 담는다.
-                if(check(now, listword)){
-                    if(visit[i])
-                        continue;
-                    q.add(new Info(listword, curCount+1));
+            for(int i = 0; i<words.length; i++){
+                // w 와 now 의 단어가 1개만 차이나야함 그리고 방문했던 것이 아니어야 함
+                if(visit[i]) continue;
+                
+                if(check(words[i], now)){
+                    q.add(new Info(words[i], change+1));
                     visit[i] = true;
                 }
             }
         }
-        
-        return result;
     }
-    public static boolean check(String now, String listword){
-        int diff = 0;
-        // 단어가 하나만 달라야 true를 반환한다.
-        for(int i = 0; i<now.length(); i++){
-            if(now.charAt(i) != listword.charAt(i))
-                diff++;
+    
+    public static boolean check(String word, String now){
+        int count = 0;
+        
+        for(int i = 0; i<word.length(); i++){
+            if(word.charAt(i) != now.charAt(i))
+                count++;
         }
-        if(diff == 1)
+        
+
+        
+        if(count == 1){
             return true;
-        else
-            return false;
+        }
+        return false;
     }
 }
 class Info{
-    String word;
-    int count;
-    Info(String word, int count){
-        this.word = word;
-        this.count = count;
+    String now;
+    int change;
+    Info(String now, int change){
+        this.now = now; this.change = change;
     }
 }
