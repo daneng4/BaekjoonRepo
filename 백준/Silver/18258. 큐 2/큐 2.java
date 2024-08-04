@@ -1,47 +1,58 @@
-import java.io.*;
+
 import java.util.*;
+import java.io.*;
 
 public class Main {
-    public static void main(String[] args) throws Exception{
+	static final String PUSH = "push";
+	static final String POP = "pop";
+	static final String FRONT = "front";
+	static final String BACK = "back";
+	static final String SIZE = "size";
+	static final String EMPTY = "empty";
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		
+		int n = Integer.parseInt(br.readLine());
+		StringTokenizer st;
+		LinkedList<Integer> q = new LinkedList<>();
+		
+		for(int i = 0; i<n; i++) {
+			st = new StringTokenizer(br.readLine());
+			String op = st.nextToken();
+			int number;
+			if(op.equals(PUSH)) {
+				number = Integer.parseInt(st.nextToken());
+				q.add(number);
+			}else if (op.equals(POP)) {
+				if(q.isEmpty())
+					bw.write("-1\n");
+				else
+					bw.write(q.pollFirst()+ "\n");
+			}else if(op.equals(SIZE))
+				bw.write(q.size() + "\n");
+			else if(op.equals(EMPTY)) {
+				if(q.isEmpty())
+					bw.write("1\n");
+				else
+					bw.write("0\n");
+			}else if(op.equals(FRONT)) {
+				if(q.isEmpty())
+					bw.write("-1\n");
+				else
+					bw.write(q.peekFirst() + "\n");
+			}else {
+				if(q.isEmpty()){
+					bw.write("-1\n");
+				}else
+					bw.write(q.peekLast() + "\n");
+			}
 
-       BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-       Deque<Integer> q = new LinkedList<>();
-       StringTokenizer st;
-       StringBuilder sb = new StringBuilder();
-       int N = Integer.parseInt(br.readLine());
-
-       while(N-->0){
-           st = new StringTokenizer(br.readLine());
-           String operator = st.nextToken();
-
-           switch (operator) {
-               case "push":
-                   int num = Integer.parseInt(st.nextToken());
-                   q.add(num);
-                   continue;
-               case "pop":
-                   if (q.isEmpty()) {
-                       sb.append("-1").append("\n");
-                       continue;
-                   } else sb.append(q.poll()).append("\n");
-                   break;
-               case "size":
-                   sb.append(q.size()).append("\n");
-                   break;
-               case "empty":
-                   if (q.isEmpty()) sb.append("1").append("\n");
-                   else sb.append("0").append("\n");
-                   break;
-               case "front":
-                   if (q.isEmpty()) sb.append("-1").append("\n");
-                   else sb.append(q.getFirst()).append("\n");
-                   break;
-               default:
-                   if (q.isEmpty()) sb.append("-1").append("\n");
-                   else sb.append(q.getLast()).append("\n");
-                   break;
-           }
-       }
-        System.out.println(sb);
-    }
+		}
+		
+		bw.flush();
+		bw.close();
+		br.close();
+		
+	}
 }
