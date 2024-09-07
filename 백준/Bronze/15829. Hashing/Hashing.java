@@ -6,19 +6,18 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		
 		int len = Integer.parseInt(br.readLine());
-		char[] str = br.readLine().toCharArray();
+		String str = br.readLine();
 		
-		// 'a' - '0' - 25
+		// 'a' - '0' = 25
 		long sum = 0;
-		for(int i = 0; i<str.length; i++) {
-			int num = str[i] - '0' - 48;
-			
-			sum += num * Math.pow(31, i) % 1234567891;
+		long pow = 1;
+		for(int i = 0; i<len; i++) {
+			sum += ((str.charAt(i) - 96) * pow);
+			pow = (pow * 31) % 1234567891;
 		}
 		
-		System.out.println(sum);
+		System.out.println(sum % 1234567891);
 	}
 
 }
