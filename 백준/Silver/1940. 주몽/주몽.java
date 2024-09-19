@@ -1,42 +1,40 @@
-
 import java.util.*;
+import java.util.Map.Entry;
 import java.io.*;
 
 public class Main {
+	public static void main(String[] args) throws Exception {
 
-	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		
 		int n = Integer.parseInt(br.readLine());
 		int m = Integer.parseInt(br.readLine());
-		int[] num = new int[n];
 		
-		st = new StringTokenizer(br.readLine());
+		// 투포인터?
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int[] elements = new int[n];
 		for(int i = 0; i<n; i++) {
-			num[i] = Integer.parseInt(st.nextToken());
+			elements[i] = Integer.parseInt(st.nextToken());
 		}
 		
-		Arrays.sort(num);
-		int start = 0;
-		int end = n - 1;
-		int count = 0;
+		Arrays.sort(elements);
+		int start = 0; int end = elements.length-1;
+		int answer = 0;
 		
 		while(start < end) {
-			int sum = num[start] + num[end];
-			
+			int sum = elements[start] + elements[end];
 			if(sum < m) {
-				start++;
-			}else if(sum == m) {
-				count++;
-				start++;
-				end--;
+				start += 1;
+			}else if(sum > m) {
+				end -= 1;
 			}else {
-				end--;
+				answer+=1;
+				start +=1; 
+				end -= 1;
 			}
 		}
 		
-		System.out.println(count);
-		
+		System.out.println(answer);
 	}
 }
