@@ -1,18 +1,18 @@
 import java.util.*;
-
 class Solution {
     public int solution(int[] nums) {
         int answer = 0;
+        int maxPick = nums.length / 2;
         
-        Map<Integer, Integer> map = new HashMap<>();
-        for(int num : nums){
-            map.put(num, map.getOrDefault(num, 0)+ 1);
+        Set<Integer> hash = new HashSet<>();
+        for(int i = 0; i<nums.length; i++){
+            hash.add(nums[i]);
         }
-        int pick = nums.length / 2;
-        if(map.size() > pick){
-            answer = pick;
+        
+        if(hash.size() <= maxPick){
+            answer = hash.size();
         }else{
-            answer = map.size();
+            answer = maxPick;
         }
         
         return answer;
