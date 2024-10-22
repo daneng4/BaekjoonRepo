@@ -1,23 +1,17 @@
 import java.util.*;
 
 public class Solution {
-    public int[] solution(int []arr) {
-        Deque<Integer> dq = new LinkedList<>();
+    public List<Integer> solution(int []arr) {
         
-        for(int num : arr){
-            if(dq.size() == 0){
-                dq.addLast(num);
+        List<Integer> answer = new ArrayList<>();
+        answer.add(arr[0]);
+        
+        for(int i = 1; i<arr.length; i++){
+            if(answer.get(answer.size() - 1) == arr[i])
                 continue;
-            }
-            if(dq.peekLast() != num){
-                dq.addLast(num);
-            }
+            answer.add(arr[i]);
         }
-        int[] answer = new int[dq.size()];
-        int idx = 0;
-        while(!dq.isEmpty()){
-            answer[idx++] = dq.poll();
-        }
+        
         return answer;
     }
 }
