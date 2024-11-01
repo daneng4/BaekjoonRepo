@@ -1,5 +1,4 @@
 import java.util.*;
-
 class Solution {
     public int[] solution(int[] prices) {
         int[] answer = new int[prices.length];
@@ -8,14 +7,14 @@ class Solution {
             q.add(price);
         }
         
-        int index = 0;
+        int index=0;
         while(!q.isEmpty()){
             int value = q.poll();
             answer[index] = 0;
-            for(int p : q){
+            for(int e : q){
                 answer[index]++;
-                if(value > p)
-                    break; 
+                if(value > e)
+                    break;
             }
             index++;
         }
