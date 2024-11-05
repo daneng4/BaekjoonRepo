@@ -3,25 +3,24 @@ import java.util.*;
 class Solution {
     public int solution(int[] scoville, int K) {
         int answer = 0;
-        
         PriorityQueue<Integer> pq = new PriorityQueue<>();
-        for(int s : scoville){
-            pq.add(s);
-        }
-
-        while(pq.size() > 1){
-            int minHot = pq.peek();
-            int minHot2 = pq.peek() * 2;
-            if(minHot >= K && minHot2 >= K){
-                break;
-            }
-            pq.add(pq.poll() + pq.poll()*2);
-            answer++;
+        
+        for(int i = 0; i<scoville.length; i++){
+            pq.add(scoville[i]);
         }
         
-        if(pq.size() == 1 && pq.peek() < K){
-            return -1;
+        while(pq.size() > 1){
+            int a = pq.poll();
+            if(a >= K)
+                break;
+            int b = pq.poll();
+            int sum = a + (b * 2);
+            pq.add(sum);
+            answer += 1;
         }
+        
+        if(pq.size() == 1 && pq.peek() < K)
+            return -1;
         
         return answer;
     }
