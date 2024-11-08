@@ -10,23 +10,25 @@ public class Main {
         int n = Integer.parseInt(br.readLine());
         StringTokenizer st = new StringTokenizer(br.readLine());
         int[] arr = new int[n];
+
         for (int i = 0; i < n; i++) {
             arr[i] = Integer.parseInt(st.nextToken());
         }
 
         Arrays.sort(arr);
         int minDiff = Integer.MAX_VALUE;
+        int start = 0;
+        int end = arr.length - 1;
         int answerA = 0;
         int answerB = 0;
 
-        int start = 0;
-        int end = arr.length - 1;
         while (start < end) {
             int mid = arr[start] + arr[end];
-            if (minDiff > Math.abs(mid)) {
+            if (Math.abs(mid) < minDiff) {
                 minDiff = Math.abs(mid);
                 answerA = arr[start];
                 answerB = arr[end];
+
                 if (mid == 0) {
                     break;
                 }
