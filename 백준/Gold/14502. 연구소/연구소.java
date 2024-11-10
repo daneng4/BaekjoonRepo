@@ -1,20 +1,18 @@
 
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
 public class Main {
-	
-	public static int n, m;
-	public static int[][] map, clone;
-	public static int[] dx = {1,-1,0,0};
-	public static int[] dy = {0,0,1,-1};
-	public static int max = Integer.MIN_VALUE;
-	public static void main(String[] args) throws IOException{
+	static int n,m;
+	static int safeArea = 0;
+	static int[] dx = {1,-1,0,0};
+	static int[] dy = {0,0,1,-1};
+	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		n = Integer.parseInt(st.nextToken());
 		m = Integer.parseInt(st.nextToken());
-		map = new int[n][m];
+		int[][] map = new int[n][m];
 		
 		for(int i = 0; i<n; i++) {
 			st = new StringTokenizer(br.readLine());
@@ -23,13 +21,12 @@ public class Main {
 			}
 		}
 		
-		setWall(0);
-		
-		System.out.println(max);
+		setWall(0, map);
+		System.out.println(safeArea);
 	}
-	public static void setWall(int count) {
-		if(count == 3) {
-			setVirus();
+	static void setWall(int wallCount, int[][] map) {
+		if(wallCount == 3) {
+			getSafeArea(map);
 			return;
 		}
 		
@@ -37,70 +34,65 @@ public class Main {
 			for(int j = 0; j<m; j++) {
 				if(map[i][j] == 0) {
 					map[i][j] = 1;
-					setWall(count+1);
+					setWall(wallCount + 1, map);
 					map[i][j] = 0;
 				}
 			}
 		}
 		
 	}
-	public static void setVirus() {
-		Queue<Node> q = new LinkedList<>();
-		
+	static void getSafeArea(int[][] map) {
+		int[][] simulMap = new int[n][m];
 		for(int i = 0; i<n; i++) {
 			for(int j = 0; j<m; j++) {
-				if(map[i][j] == 2) {
-					q.add(new Node(i,j));
-				}
+				simulMap[i][j] = map[i][j];
 			}
 		}
 		
-		int[][] clone = new int[n][m];
-		for(int i = 0; i<n; i++) {
-			clone[i] = map[i].clone();
-		}
+		simulation(simulMap);
 		
-		while(!q.isEmpty()) {
-            Node now = q.poll();
-            int x = now.x; 
-            int y = now.y; 
-
-            for(int k=0; k<4; k++) {
-                int nx = x + dx[k];
-                int ny = y + dy[k];
-
-                if(0<=nx && nx<n && 0<=ny && ny<m) {
-                    if(clone[nx][ny] == 0) {
-                        q.add(new Node(nx,ny));
-                        clone[nx][ny] = 2;
-                    }
-                }
-            }
-        }
-		
-		findSafeZone(clone);
-	}
-	
-	public static void findSafeZone(int[][] clone) {
-		int safe = 0;
+		int count = 0;
 		for(int i = 0; i<n; i++) {
 			for(int j = 0; j<m; j++) {
-				if(clone[i][j] == 0)
-					safe++;
+				if(simulMap[i][j] == 0)
+					count+=1;
 			}
 		}
-		if(max < safe) {
-			max = safe;
-		}
+		
+		safeArea = Math.max(safeArea, count);
 	}
-
-	static class Node {
-		int x;
-		int y;
-		Node(int x, int y){
-			this.x = x;
-			this.y = y;
+	static int[][] simulation(int[][] map) {
+		boolean[][] visit = new boolean[n][m];
+		Queue<int[]> virusLocation = new LinkedList<>();
+		for(int i = 0; i<n; i++) {
+			for(int j = 0; j<m; j++) {
+				if(map[i][j] == 2)
+					virusLocation.add(new int[] {i, j});
+			}
 		}
+		
+		int[] peek = virusLocation.peek();
+		visit[peek[0]][peek[1]] = true;
+		
+		while(!virusLocation.isEmpty()) {
+			int[] poll = virusLocation.poll();
+			int curX = poll[0];
+			int curY = poll[1];
+			map[curX][curY] = 2;
+			
+			for(int i = 0; i<4; i++) {
+				int nextX = curX + dx[i];
+				int nextY = curY + dy[i];
+				if(nextX < 0 || nextY < 0 || nextX >= n || nextY >= m)
+					continue;
+				if(visit[nextX][nextY] || map[nextX][nextY] != 0)
+					continue;
+				
+				virusLocation.add(new int[] {nextX, nextY});
+				visit[nextX][nextY] = true;
+			}
+		}
+		
+		return map;
 	}
 }
-
