@@ -1,52 +1,59 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
 public class Main {
-    static Queue<Integer> docq; // 문서 넣는 큐
-    static Queue<Integer> arrayq; // 문서 순서넣는 큐
-    static int m;
-    static int n;
-    public static void main(String[] args) throws Exception{
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-        int t = Integer.parseInt(br.readLine());
-        StringTokenizer st;
-        for(int i = 0; i<t; i++){
-            docq = new LinkedList<>();
-            arrayq = new LinkedList<>();
-
-            st = new StringTokenizer(br.readLine());
-            n = Integer.parseInt(st.nextToken()); // 문서의 개수
-            m = Integer.parseInt(st.nextToken()); // 타깃 문서의 현재 순서
-            st = new StringTokenizer(br.readLine());
-
-            for(int j = 0; j<n; j++){
-                docq.offer(Integer.parseInt(st.nextToken()));
-                arrayq.offer(j);
-            }
-
-            solve();
-        }
-    }
-    public static void solve(){
-        int count = 1; // 순서
-
-        while(!docq.isEmpty()){ // 큐가 비기 전까지 반복
-            int max = Collections.max(docq);
-            int curdoc = docq.poll();
-            int curindex = arrayq.poll();
-            if(curdoc == max){ // 현재 문서가 중요도가 최대치인 문서일경우
-                if(curindex == m){ // 타깃 문서였다면
-                    System.out.println(count); // 출력
-                    break;
-                }
-                count++; // 아니면 count 증가
-            }else{
-                docq.offer(curdoc);
-                arrayq.offer(curindex);
-            }
-
-        }
-    }
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int T = Integer.parseInt(br.readLine());
+		StringTokenizer st;
+		Queue<Seq> q;
+		
+		for(int t = 0; t<T; t++) {
+			q = new LinkedList<>();
+			int answer = 0;
+			st = new StringTokenizer(br.readLine());
+			int n = Integer.parseInt(st.nextToken());
+			int target = Integer.parseInt(st.nextToken());
+			int[] maxValue = new int[n];
+			
+			st = new StringTokenizer(br.readLine());
+			for(int i = 0; i<n; i++) {
+				int ele = Integer.parseInt(st.nextToken());
+				maxValue[i] = ele;
+				if(i == target)
+					q.add(new Seq(ele, true));
+				else
+					q.add(new Seq(ele, false));
+			}
+			
+			Arrays.sort(maxValue);
+			int idx = maxValue.length-1;
+			
+			while(!q.isEmpty()) {
+				Seq poll = q.poll();
+				// target이 오면
+				if(poll.target && poll.num == maxValue[idx]) {
+					answer += 1;
+					break;
+				}else if(poll.num == maxValue[idx]) {
+					idx--;
+					answer++;
+				}else {
+					q.add(poll);
+				}
+				
+			}
+			
+			System.out.println(answer);
+		}
+	}
+}
+class Seq{
+	int num;
+	boolean target;
+	public Seq(int num, boolean target) {
+		this.num = num;
+		this.target = target;
+	}
 }
