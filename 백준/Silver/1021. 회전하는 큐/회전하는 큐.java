@@ -53,14 +53,6 @@ public class Main {
 		System.out.println(answer);
 	}
 	static int findPos(int number) {
-		int result = 0;
-		for(int i = 0; i<q.size(); i++) {
-			if(number == q.get(i)) {
-				result = i;
-				break;
-			}
-		}
-		
-		return result;
+		return q.indexOf(number);
 	}
 }
