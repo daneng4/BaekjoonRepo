@@ -4,8 +4,6 @@ import java.util.*;
 
 public class Main {
 	static int[][] map;
-	static boolean[][] visit;
-	static boolean[][] water;
 	static int n;
 	static int answer = 1;
 	static int[] dx = {1,-1,0,0};
@@ -15,8 +13,7 @@ public class Main {
     	
     	n = Integer.parseInt(br.readLine());
     	map = new int[n][n];
-    	visit = new boolean[n][n];
-    	water = new boolean[n][n];
+    	
     	int minH = Integer.MAX_VALUE;
     	int maxH = 0;
     	
@@ -30,14 +27,8 @@ public class Main {
     	}
     	
     	for(int i = minH; i<=maxH; i++) {
-    		getSafeArea(i);
+    		boolean[][] water = getSafeArea(i);
     		int count = 0;
-    		
-    		for(int j = 0; j<n; j++) {
-    			for(int k = 0; k<n; k++) {
-    				water[j][k] = visit[j][k];
-    			}
-    		}
     		
     		for(int j = 0; j<n; j++) {
     			for(int k = 0; k<n; k++) {
@@ -53,14 +44,20 @@ public class Main {
     	
     	System.out.println(answer);
     }
-    public static void getSafeArea(int h) {
+    
+    public static boolean[][] getSafeArea(int h) {
+    	boolean[][] visit = new boolean[n][n];
+    	
     	for(int i = 0; i<n; i++) {
     		for(int j = 0; j<n; j++) {
     			if(map[i][j] <= h)
     				visit[i][j] = true;
     		}
     	}
+    	
+    	return visit;
     }
+    
     public static void bfs(int x, int y, boolean[][] water) {
     	Queue<int[]> q = new LinkedList<>();
     	q.add(new int[] {x,y});
