@@ -2,8 +2,8 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	private static Map<Character, Integer> map;
 	private static int answer = 0;
+	private static int[] minArr;
 	public static void main(String args[]) throws Exception  {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
@@ -11,70 +11,52 @@ public class Main {
 		int S = Integer.parseInt(st.nextToken());
 		int P = Integer.parseInt(st.nextToken());
 		String dna = br.readLine();
+		minArr = new int[4];
 		
-		map = new HashMap<>();
 		st = new StringTokenizer(br.readLine());
+		for(int i = 0; i<4; i++) {
+			minArr[i] = Integer.parseInt(st.nextToken());
+		}
 		
-		map.put('A', Integer.parseInt(st.nextToken()));
-		map.put('C', Integer.parseInt(st.nextToken()));
-		map.put('G', Integer.parseInt(st.nextToken()));
-		map.put('T', Integer.parseInt(st.nextToken()));
+		for(int i = 0; i<P; i++) {
+			char c = dna.charAt(i);
+			if(c == 'A') minArr[0]--;
+			if(c == 'C') minArr[1]--;
+			if(c == 'G') minArr[2]--;
+			if(c == 'T') minArr[3]--;
+		}
 		
-		int start = 0; int end = P-1;
-		while(true) {
+		checkCondition();
+		int i = -1;
+		
+		for(int j = P; j<S; j++) {
+			// 이전 부분 문자열의 시작 위치
+			i = j - P;
 			
-			if(start == 0) {
-				for(int i = start; i<=end; i++) {
-					checkPassword(dna.charAt(i));
-				}
-				checkPossible();
-			}else {
-				checkPossible();
-			}
-			char startC = dna.charAt(start);
-			map.put(startC, map.get(startC) + 1);
-			start += 1;
-			end += 1;
-			if(end == S)
-				break;
-			char endC = dna.charAt(end);
-			map.put(endC, map.get(endC) - 1);
+			char pre = dna.charAt(i);
+			if(pre == 'A') minArr[0]++;
+			if(pre == 'C') minArr[1]++;
+			if(pre == 'G') minArr[2]++;
+			if(pre == 'T') minArr[3]++;
 			
+			char next = dna.charAt(j);
+			if(next == 'A') minArr[0]--;
+			if(next == 'C') minArr[1]--;
+			if(next == 'G') minArr[2]--;
+			if(next == 'T') minArr[3]--;
+			
+			checkCondition();
 		}
 		
 		System.out.println(answer);
 	}
-	private static void checkPassword(char c) {
-		switch (c) {
-			case 'A' : {
-				map.put(c, map.get(c) - 1);
-				break;
-			}
-			
-			case 'C' : {
-				map.put(c, map.get(c) - 1);
-				break;
-			}
-			
-			case 'G' : {
-				map.put(c, map.get(c) - 1);
-				break;
-			}
-			
-			case 'T' : {
-				map.put(c, map.get(c) - 1);
-				break;
-			}
-		}
-	}
-	private static void checkPossible() {
-		for(char key : map.keySet()) {
-			if(map.get(key) > 0) {
+	private static void checkCondition() {
+		for(int i = 0; i<4; i++) {
+			if(minArr[i] > 0)
 				return;
-			}
 		}
 		
-		answer +=1;
+		answer += 1;
 		return;
 	}
 }
