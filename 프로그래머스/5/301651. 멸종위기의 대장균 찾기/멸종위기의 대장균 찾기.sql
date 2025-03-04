@@ -14,7 +14,7 @@ with recursive tmp as (
 select count(*) as count, generation
 from tmp
 where id not in (
-        select distinct parent_id
+        select parent_id
         from tmp
         where parent_id is not null)
 group by generation
