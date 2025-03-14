@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	static ArrayList<Integer>[] list;
+	static ArrayList<PriorityQueue<Integer>> list;
 	static boolean[] visit;
 	static int[] arr;
 	public static void main(String[] args) throws IOException {
@@ -13,27 +13,25 @@ public class Main {
 		int M = Integer.parseInt(st.nextToken());
 		int R = Integer.parseInt(st.nextToken());
 		
-		list = new ArrayList[N+1];
-		for(int i = 1; i<=N; i++) {
-			list[i] = new ArrayList<>();
-		}
+		list = new ArrayList<>();
 		visit = new boolean[N+1];
 		arr = new int[N+1];
-		for(int i = 1; i<=N; i++) {
-			Arrays.fill(arr, -1);
+
+		for(int i = 0; i<=N; i++) {
+			list.add(new PriorityQueue<>());
 		}
+	
+		
+		Arrays.fill(arr, -1);
+		
 		
 		for(int i = 0; i<M; i++) {
 			st = new StringTokenizer(br.readLine());
 			int a = Integer.parseInt(st.nextToken());
 			int b = Integer.parseInt(st.nextToken());
 			
-			list[a].add(b);
-			list[b].add(a);
-		}
-		
-		for(int i = 1; i<=N; i++) {
-			Collections.sort(list[i]);
+			list.get(a).add(b);
+			list.get(b).add(a);
 		}
 		
 		dfs(R, 0);
@@ -48,10 +46,11 @@ public class Main {
 		visit[R] = true;
 		arr[R] = count;
 		
-		for(int r : list[R]) {
-			if(visit[r])
+		while(!list.get(R).isEmpty()) {
+			int next = list.get(R).poll();
+			if(visit[next])
 				continue;
-			dfs(r, count + 1);
+			dfs(next, count + 1);
 		}
 	}
 }
