@@ -2,36 +2,32 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-
-    public static int[] num;
-    public static Integer[] sum;
-
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int n = Integer.parseInt(br.readLine()); // 수열 길이
-        num = new int[n];
-        sum = new Integer[n];
-
+        int n = Integer.parseInt(br.readLine());
+        int[] arr = new int[n];
         StringTokenizer st = new StringTokenizer(br.readLine());
+
         for(int i = 0; i<n; i++){
-            num[i] = Integer.parseInt(st.nextToken());
+            arr[i] = Integer.parseInt(st.nextToken());
         }
 
+        int[] dp = new int[n];
         for(int i = 0; i<n; i++){
-            sum[i] = num[i];
+            dp[i] = arr[i];
             for(int j = 0; j<i; j++){
-                if(num[i] > num[j]) {
-                    sum[i] = Math.max(sum[j]+num[i], sum[i]);
+                if(dp[i] > dp[j]){
+                    dp[i] = Math.max(dp[i], dp[j] + arr[i]);
                 }
             }
         }
 
-        int max = 0;
+        int answer = 0;
         for(int i = 0; i<n; i++){
-            if(sum[i] > max)
-                max = sum[i];
+            answer = Math.max(answer, dp[i]);
         }
-        System.out.println(max);
+
+        System.out.println(answer);
     }
 }
