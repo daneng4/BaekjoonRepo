@@ -16,8 +16,7 @@ public class Main {
             if(a == -1 && b == -1 && c == -1)
                 break;
 
-            sb.append(String.format("w(%d, %d, %d) = ", a, b, c));
-            sb.append(w(a,b,c) + "\n");
+            sb.append("w(" + a + ", " + b + ", " + c + ") = ").append(w(a,b,c) + "\n");
         }
 
         System.out.println(sb);
