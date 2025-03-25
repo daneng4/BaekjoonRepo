@@ -2,13 +2,12 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static int[][][] dp;
+    static int[][][] dp = new int[21][21][21];;
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
         StringBuilder sb = new StringBuilder();
 
-        dp = new int[21][21][21];
         while(true){
             st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
