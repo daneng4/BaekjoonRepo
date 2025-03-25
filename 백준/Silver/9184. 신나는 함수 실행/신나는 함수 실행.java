@@ -16,7 +16,7 @@ public class Main {
             if(a == -1 && b == -1 && c == -1)
                 break;
 
-            sb.append("w(" + a + ", " + b + ", " + c + ") = ").append(w(a,b,c) + "\n");
+            sb.append("w(").append(a).append(", ").append(b).append(", ").append(c).append(") = ").append(w(a, b, c)).append("\n");
         }
 
         System.out.println(sb);
