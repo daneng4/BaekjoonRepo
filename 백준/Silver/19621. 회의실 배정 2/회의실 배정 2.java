@@ -1,64 +1,27 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
+import java.math.*;
 
 public class Main {
-	static class Meeting {
-		int start;
-		int end;
-		int size;
-		public Meeting(int start, int end, int size) {
-			this.start = start; this.end = end; this.size = size;
-		}
-		
-	}
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int n = Integer.parseInt(br.readLine());
-		
+		int N = Integer.parseInt(br.readLine());
+		int[] arr = new int[Math.max(2, N)];
+		int[] dp = new int[Math.max(2, N)];
 		StringTokenizer st;
-		Meeting[] m = new Meeting[n+1];
-		m[0] = new Meeting(0, 0, 0);
-		for(int i = 1; i<=n; i++) {
+		for (int i = 0; i < N; i++) {
 			st = new StringTokenizer(br.readLine());
-			int start = Integer.parseInt(st.nextToken());
-			int end = Integer.parseInt(st.nextToken());
-			int size = Integer.parseInt(st.nextToken());
-			
-			m[i] = new Meeting(start, end, size);
+			int s = Integer.parseInt(st.nextToken());
+			int e = Integer.parseInt(st.nextToken());
+			int m = Integer.parseInt(st.nextToken());
+			arr[i] = m;
 		}
-		
-		
-		int answer = 0;
-		int[] dp = new int[n+1];
-		// 회의 시간이 오름 차순으로 주어질 경우
-		for(int i = 1; i<=n; i++) {
-			dp[i] = m[i].size;
-			for(int j = 0; j<i-1; j++) {
-				if(m[i].start > m[j].end) {
-					dp[i] = Math.max(dp[i], dp[j] + m[i].size);
-				}
-			}
+		dp[0] = arr[0];
+		dp[1] = Math.max(arr[0], arr[1]);
+		for (int i = 2; i < dp.length; i++) {
+			dp[i] = Math.max(dp[i-1], dp[i-2]+arr[i]);
 		}
-		
-		for(int i = 1; i<=n; i++) {
-			answer = Math.max(answer, dp[i]);
-		}
-		
-		dp = new int[n+1];
-		// 회의 시간이 내림 차순으로 주어질 경우
-		for(int i = 1; i<=n; i++) {
-			dp[i] = m[i].size;
-			for(int j = 0; j<i-1; j++) {
-				if(m[i].end < m[j].start) {
-					dp[i] = Math.max(dp[i], dp[j] + m[i].size);
-				}
-			}
-		}
-		
-		for(int i = 1; i<=n; i++) {
-			answer = Math.max(answer, dp[i]);
-		}
-		
-		System.out.println(answer);
+		System.out.println(dp[N-1]);
 	}
+	
 }
