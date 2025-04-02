@@ -7,7 +7,7 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
         int max = 4971599;
-        int[] second = new int[max+1];
+        long[] second = new long[max+1];
         StringBuilder sb = new StringBuilder();
 
         for(int i = 0; i<n; i++){
@@ -24,7 +24,7 @@ public class Main {
                     second[j] += 1;
                 }
             }else{
-                int sum = 0;
+                long sum = 0;
                 for(int j = sSecond; j<eSecond; j++){
                     sum += second[j];
                 }
