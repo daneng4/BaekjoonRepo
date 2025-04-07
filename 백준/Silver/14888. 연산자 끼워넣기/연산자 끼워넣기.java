@@ -4,7 +4,6 @@ import java.util.*;
 public class Main {
     static int[] arr;
     static int[] op;
-    static int[] seq;
     static int n;
     static int max = Integer.MIN_VALUE;
     static int min = Integer.MAX_VALUE;
@@ -14,7 +13,6 @@ public class Main {
 
         arr = new int[n];
         op = new int[4];
-        seq = new int[n-1];
         StringTokenizer st = new StringTokenizer(br.readLine());
         for(int i = 0; i<n; i++){
             arr[i] = Integer.parseInt(st.nextToken());
@@ -25,13 +23,14 @@ public class Main {
             op[i] = Integer.parseInt(st.nextToken());
         }
 
-        run(0);
+        run(1, arr[0]);
         System.out.println(max);
         System.out.println(min);
     }
-    static void run(int idx){
-        if(idx == n-1){
-            cal();
+    static void run(int idx, int cur){
+        if(idx == n){
+            max = Math.max(max, cur);
+            min = Math.min(min, cur);
             return;
         }
 
@@ -39,27 +38,26 @@ public class Main {
             if(op[i] == 0)
                 continue;
 
-            op[i]--;
-            seq[idx] = i;
-            run(idx + 1);
-            op[i]++;
-        }
-    }
-    static void cal(){
-        int result = arr[0];
-        for(int i = 0; i<n-1; i++){
-            if(seq[i] == 0){
-                result += arr[i+1];
-            }else if(seq[i] == 1){
-                result -= arr[i+1];
-            }else if(seq[i] == 2){
-                result *= arr[i+1];
-            }else{
-                result /= arr[i+1];
+            if(i == 0){
+                op[i]--;
+                run(idx + 1, cur + arr[idx]);
+                op[i]++;
+            }
+            else if(i == 1){
+                op[i]--;
+                run(idx + 1, cur - arr[idx]);
+                op[i]++;
+            }
+            else if(i == 2){
+                op[i]--;
+                run(idx + 1, cur * arr[idx]);
+                op[i]++;
+            }
+            else {
+                op[i]--;
+                run(idx + 1, cur / arr[idx]);
+                op[i]++;
             }
         }
-
-        max = Math.max(result, max);
-        min = Math.min(result, min);
     }
 }
