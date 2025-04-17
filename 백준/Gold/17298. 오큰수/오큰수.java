@@ -1,43 +1,46 @@
-
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.util.Scanner;
-import java.util.Stack;
+import java.io.*;
+import java.util.*;
 
 public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-	public static void main(String[] args) throws IOException {
+        int n = Integer.parseInt(br.readLine());
+        Stack<Integer> stack = new Stack<>();
+        int[] num = new int[n];
 
-		Scanner sc = new Scanner(System.in);
-		int n = sc.nextInt();
-		int nums[] = new int[n];
-		int answer[] = new int[n];
-		StringBuffer sb = new StringBuffer();
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        for(int i = 0; i<n; i++){
+            num[i] = Integer.parseInt(st.nextToken());
+        }
 
-		for (int i = 0; i < n; i++) {
-			nums[i] = sc.nextInt();
-		}
+        int[] nge = new int[n];
+        for(int i = n-1; i>=0; i--){
+            int number = num[i];
+            if(stack.isEmpty()){
+                nge[i] = -1;
+                stack.push(number);
+                continue;
+            }
+            while(true){
+                if(stack.isEmpty()){
+                    nge[i] = -1;
+                    break;
+                }
+                if(stack.peek() > num[i]){
+                    nge[i] = stack.peek();
+                    break;
+                }
+                stack.pop();
+            }
+            stack.push(number);
+        }
 
-		Stack<Integer> st = new Stack<>();
-		st.push(0);
-		for(int i = 0; i < n; i++) {
-			
-			while(!st.empty() && nums[st.peek()] < nums[i]) {
-				answer[st.pop()] = nums[i];
-			}
-			st.push(i);
-		}
-		
-		while(!st.empty()) {
-			answer[st.pop()] = -1;
-		}
-		
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		for(int i = 0; i<n; i++) {
-			bw.write(answer[i] + " ");
-		}
-		bw.write("\n");
-		bw.flush();
-	}
+        StringBuilder sb = new StringBuilder();
+        for(int element : nge){
+            sb.append(element).append(" ");
+        }
+
+        System.out.println(sb);
+    }
 }
