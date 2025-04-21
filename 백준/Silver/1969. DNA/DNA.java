@@ -1,80 +1,45 @@
-
 import java.io.*;
 import java.util.*;
 
 public class Main {
-	
-	static List<String>[] list;
-	static Map<String, Integer> dna;
-	static List<String> result;
-	static int hdSum = 0;
-	public static void main(String[] args) throws Exception  {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		
+
 		int n = Integer.parseInt(st.nextToken());
 		int m = Integer.parseInt(st.nextToken());
-		dna = new HashMap<>();
-		result = new ArrayList<>();
-		list = new ArrayList[n];
-		for(int i = 0; i<n; i++) {
-			list[i] = new ArrayList<>();
+
+		ArrayList<String> dnas = new ArrayList<>();
+		for(int i = 0; i<n; i++){
+			dnas.add(br.readLine());
 		}
-		
-		for(int i = 0; i<n; i++) {
-			String[] split = br.readLine().split("");
-			for(String str : split) {
-				list[i].add(str);
+
+		int hammingDistance = 0;
+		StringBuilder sb = new StringBuilder();
+		for(int i = 0; i<m; i++){
+			Map<Character, Integer> cmap = new HashMap<>();
+			for(int j = 0; j<n; j++){
+				char c = dnas.get(j).charAt(i);
+				cmap.put(c, cmap.getOrDefault(c, 0) + 1);
 			}
-		}
-		for(int i = 0; i<m; i++) {
-			initDNA();
-			findMostDNA(i);
-		}
-		
-		for(String str : result) {
-			System.out.print(str);
-		}
-		System.out.println();
-		System.out.println(hdSum);
-		
-	}
-	public static void findMostDNA(int index) {
-		int max = Integer.MIN_VALUE;
-		String keyDna = null;
-		
-		for(int i = 0; i<list.length; i++) {
-			String str = list[i].get(index);
-			dna.put(str, dna.get(str)+1);
-		}
-		
-		for(Map.Entry<String, Integer> entry : dna.entrySet()) {
-			if(entry.getValue() > max) {
-				keyDna = entry.getKey();
-				max = entry.getValue();
-			}else if (entry.getValue() == max) {
-				int asc = (int)entry.getKey().charAt(0);
-				int maxAsc = (int)keyDna.charAt(0);
-				if(asc - maxAsc < 0) {
-					keyDna = entry.getKey();
-					max = entry.getValue();
+
+			char targetKey = 'Z';
+			int targetValue = 0;
+			// key들 중 가장 value가 많은 것이 targetKey
+			for(char key : cmap.keySet()){
+				if(cmap.get(key) > targetValue){
+					targetValue = cmap.get(key);
+					targetKey = key;
+				}else if(cmap.get(key) == targetValue){
+					targetKey = (targetKey - '0' > key - '0' ? key : targetKey);
 				}
-					
 			}
+
+			hammingDistance += (n-targetValue);
+			sb.append(targetKey);
 		}
-		result.add(keyDna);
-		
-		for(Map.Entry<String, Integer> entry : dna.entrySet()) {
-			if(entry.getKey().equals(keyDna)) 
-				continue;
-			hdSum += entry.getValue();
-		}
-		
-	}
-	
-	public static void initDNA() {
-		for(int i = 0; i<4; i++) {
-			dna.put("A", 0); dna.put("C", 0); dna.put("G", 0); dna.put("T", 0);
-		}
-	}
+
+		sb.append("\n").append(hammingDistance);
+		System.out.println(sb);
+    }
 }
