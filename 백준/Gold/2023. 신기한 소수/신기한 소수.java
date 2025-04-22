@@ -2,45 +2,38 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	static String[] prime = {"2","3","5","7"};
-	static int n;
-	static StringBuilder sb = new StringBuilder();
-	public static void main(String[] args) throws Exception  {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	
+    static int n;
+	public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		n = Integer.parseInt(br.readLine());
-		
-		for(int i = 0; i<prime.length; i++) {
-			dfs(prime[i], 1);
-		}
-		
-		System.out.println(sb);
+
+		dfs(2,1);
+		dfs(3,1);
+		dfs(5,1);
+		dfs(7,1);
+
 	}
-	public static void dfs(String num, int len) {
-		if(len == n) {
-			if(isPrime(num))
-				sb.append(num).append("\n");
+	static void dfs(int num, int count){
+		if(count == n){
+			if(isPrime(num)){
+				System.out.println(num);
+			}
 			return;
 		}
-		
-		for(int i = 0; i<=9; i++) {
-			if(!isPrime(num+i))
-				continue;
-			dfs(num+i, len+1);
-			
+
+		for(int i = 1; i<=9; i++){
+			if(isPrime(num * 10 + i)){
+				dfs(num * 10 + i, count + 1);
+			}
 		}
-		
+
 	}
-	public static boolean isPrime(String str) {
-		int primeNum = Integer.parseInt(str);
-		for(int i = 2; i <= primeNum/2; i++) {
-			if(primeNum % i == 0)
+	static boolean isPrime(int num){
+		for(int i = 2; i<=Math.sqrt(num); i++){
+			if(num % i == 0)
 				return false;
 		}
+
 		return true;
 	}
 }
-
-
-
-
