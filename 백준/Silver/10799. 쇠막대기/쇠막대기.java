@@ -2,29 +2,30 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static int result = 0;
-    public static void main(String[] args) throws Exception{
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		String str = br.readLine();
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        char[] arr = br.readLine().toCharArray();
-        Stack<Character> stack = new Stack<>();
+		Stack<Character> stack = new Stack<>();
+		int answer = 0;
+		for(int i = 0; i<str.length(); i++){
+			char c = str.charAt(i);
 
-        for(int i = 0; i<arr.length; i++){
-            char str = arr[i];
-            if(str == '('){ // '(' 이면 push
-                stack.push(str);
-                continue;
-            }
-            if(str == ')'){ // ')' 이면 pop
-                stack.pop();
-                if (arr[i-1] == '('){ // 만약 ')' 전 문자가 '(' 라면
-                    // 레이저
-                    result += stack.size();
-                }else // ')' 전 문자가 ')' 라면 그냥 막대기 이므로
-                    result += 1;
-            }
+			if(c == '('){
+				stack.push(c);
+			}else{
+				if(str.charAt(i-1) == '('){
+					// 레이저 -> 스택 size만큼 +
+					stack.pop();
+					answer += stack.size();
+				}else{
+					// 막대의 끝 -> +1
+					answer += 1;
+					stack.pop();
+				}
+			}
+		}
 
-        }
-        System.out.println(result);
-    }
+		System.out.println(answer);
+	}
 }
