@@ -1,38 +1,41 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 public class Main {
-
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		
-		int testCase = Integer.parseInt(br.readLine());
-		StringBuilder sb = new StringBuilder();
-		
-		for(int tc = 0; tc<testCase; tc++) {
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+		int t = Integer.parseInt(br.readLine());
+
+		while(t-- > 0){
+			ArrayList<String> phone = new ArrayList<>();
 			int n = Integer.parseInt(br.readLine());
-			String[] num = new String[n];
-			for(int i = 0; i<n; i++) {
-				num[i] = br.readLine();
+			boolean flag = false;
+
+			for(int i = 0; i<n; i++){
+				String num = br.readLine();
+				phone.add(num);
 			}
-			
-			Arrays.sort(num);
-			
-			if(check(num)) {
-				sb.append("NO").append("\n");
+
+			Collections.sort(phone);
+
+			if(isValid(phone)){
+				bw.write("YES\n");
+			}else{
+				bw.write("NO\n");
 			}
-			else
-				sb.append("YES").append("\n");
-			
 		}
-		System.out.println(sb.toString());
-		
+
+		bw.flush();
+		bw.close();
+		br.close();;
 	}
-	public static boolean check(String[] num) {
-		for(int i = 0; i<num.length-1; i++) {
-			if(num[i+1].startsWith(num[i]))
-				return true;
+	static boolean isValid(ArrayList<String> phone){
+		for(int i = 0; i<phone.size()-1; i++){
+			if(phone.get(i+1).startsWith(phone.get(i)))
+				return false;
 		}
-		return false;
+		return true;
 	}
 }
