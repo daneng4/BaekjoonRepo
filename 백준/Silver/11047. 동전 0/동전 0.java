@@ -1,37 +1,26 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
-public class Main  {
+public class Main {
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
 
-    static ArrayList<Integer> list;
-    public static void main(String[] args) throws IOException {
+		int n = Integer.parseInt(st.nextToken());
+		int k = Integer.parseInt(st.nextToken());
+		int[] money = new int[n];
+		int count = 0;
+		for(int i = 0; i<n; i++){
+			money[i] = Integer.parseInt(br.readLine());
+		}
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int n = Integer.parseInt(st.nextToken());
-        int k = Integer.parseInt(st.nextToken());
+		for(int i = n-1; i>=0; i--){
+			if(money[i] > k)
+				continue;
+			count += k / money[i];
+			k = k % money[i];
+		}
 
-        list = new ArrayList<>();
-
-        for(int i = 0; i<n; i++){
-            st = new StringTokenizer(br.readLine());
-            int coin = Integer.parseInt(st.nextToken());
-            if(coin > k)
-                continue;
-
-            list.add(coin);
-        }
-        list.sort(Collections.reverseOrder());
-        int result = 0;
-        for(int i = 0; i<list.size(); i++){
-            result += k / list.get(i);
-            k = k % list.get(i);
-            if(k == 0){
-                System.out.println(result);
-                break;
-            }
-
-        }
-
-    }
+		System.out.println(count);
+	}
 }
