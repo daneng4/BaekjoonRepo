@@ -2,26 +2,25 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int n = Integer.parseInt(br.readLine());
 
-    public static void main(String[] args) throws Exception{
+		StringBuilder sb = new StringBuilder();
+		PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
 
-       BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-       int n = Integer.parseInt(br.readLine());
-       PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
-       StringBuilder sb = new StringBuilder();
+		while(n -- > 0){
+			int num = Integer.parseInt(br.readLine());
+			if(num == 0){
+				if(pq.isEmpty())
+					sb.append(0 + "\n");
+				else
+					sb.append(pq.poll() + "\n");
+			}else{
+				pq.add(num);
+			}
+		}
 
-       for(int i = 0; i<n; i++){
-           int mode = Integer.parseInt(br.readLine());
-           if(mode == 0){ // list에서 최대값 출력
-               if(pq.isEmpty()){ // 0인데 list가 비어있으면 0 출력
-                   sb.append("0\n");
-               }else{ // 비어있지않으면 최대값 출력
-                   sb.append(pq.poll()).append("\n");
-               }
-           }else{
-               pq.offer(mode);
-           }
-       }
-        System.out.println(sb);
-    }
+		System.out.println(sb);
+	}
 }
