@@ -1,40 +1,38 @@
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-
-	public static void main(String[] args) throws IOException{
-
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int n = Integer.parseInt(br.readLine());
-		
-		PriorityQueue<Integer> queue = new PriorityQueue<>((o1, o2) ->{
-			int firstabs = Math.abs(o1);
-			int secondabs = Math.abs(o2);
-			if (firstabs == secondabs) {
-				return o1 > o2 ? 1:-1;
-			}else {
-				return firstabs - secondabs;
+	static class Heap implements Comparable<Heap> {
+		int x;
+		public Heap(int x){
+			this.x = x;
+		}
+		public int compareTo(Heap h){
+			if(Math.abs(this.x) == Math.abs(h.x)){
+				return this.x - h.x;
 			}
-		});
-		
-		for(int i = 0; i<n; i++) {
-			int request = Integer.parseInt(br.readLine());
-			if (request == 0) {
-				if(queue.isEmpty()) {
-					System.out.println("0");
-				}else
-					System.out.println(queue.poll());	
-			}else {
-				queue.add(request);
-			}	
+			return Math.abs(this.x) - Math.abs(h.x);
 		}
 	}
-}
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb = new StringBuilder();
+		PriorityQueue<Heap> pq = new PriorityQueue<>();
+		int n = Integer.parseInt(br.readLine());
 
+		while(n -- > 0){
+			int num = Integer.parseInt(br.readLine());
+
+			if(num == 0){
+				if(pq.isEmpty())
+					sb.append("0\n");
+				else
+					sb.append(pq.poll().x + "\n");
+			}else{
+				pq.add(new Heap(num));
+			}
+		}
+
+		System.out.println(sb);
+	}
+}
