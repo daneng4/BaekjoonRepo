@@ -1,10 +1,7 @@
 -- 코드를 입력하세요
-SELECT TITLE, BOARD.BOARD_ID, REPLY_ID, REPLY.WRITER_ID, REPLY.CONTENTS, 
-DATE_FORMAT(REPLY.CREATED_DATE, '%Y-%m-%d') AS CREATED_DATE
-
-FROM USED_GOODS_REPLY AS REPLY
-LEFT JOIN USED_GOODS_BOARD AS BOARD
-ON REPLY.BOARD_ID = BOARD.BOARD_ID
-
-WHERE DATE_FORMAT(BOARD.CREATED_DATE, '%Y-%m') = '2022-10'
-ORDER BY REPLY.CREATED_DATE ASC, BOARD.TITLE ASC
+SELECT b.title, b.board_id, r.reply_id, r.writer_id, r.contents, 
+    to_char(r.created_date,'YYYY-MM-DD') as created_date
+from used_goods_board b join used_goods_reply r
+on b.board_id = r.board_id
+where to_char(b.created_date, 'YYYY-MM') = '2022-10'
+order by created_date, title
