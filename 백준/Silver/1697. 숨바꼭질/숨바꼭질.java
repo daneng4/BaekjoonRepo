@@ -1,43 +1,46 @@
-
 import java.io.*;
 import java.util.*;
 
 public class Main {
-	public static int bro;
-	public static int[] point;
-	public static void main(String[] args) throws Exception {
-		
+	static int[] map;
+	static int max = 100001;
+	static int k;
+	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		
-		int subin = Integer.parseInt(st.nextToken());
-		bro = Integer.parseInt(st.nextToken());
-		point = new int[100001];
-		int result = bfs(subin);
+		int n = Integer.parseInt(st.nextToken());
+		k = Integer.parseInt(st.nextToken());
+		map = new int[max];
+
+		int result = bfs(n);
 		System.out.println(result);
 	}
-	public static int bfs(int subin) {
+	static int bfs(int n){
 		Queue<Integer> q = new LinkedList<>();
-		q.offer(subin);
-		point[subin] = 1;
-		while(!q.isEmpty()) {
-			int now = q.poll();
-			if(now == bro) {
-				return point[now]-1;
+		q.add(n);
+		map[n] = 1;
+
+		while(!q.isEmpty()){
+			int pos = q.poll();
+
+			if(pos == k){
+				return map[pos] - 1;
 			}
-			if(now-1 >= 0 && point[now-1] == 0) {
-				point[now-1] = point[now]+1;
-				q.offer(now-1);
+
+			if(0 <= pos - 1 && map[pos-1] == 0){
+				map[pos-1] = map[pos] + 1;
+				q.add(pos-1);
 			}
-			if(now+1 < 100001 && point[now+1] == 0){
-				point[now+1] = point[now]+1;
-				q.offer(now+1);
+			if(pos + 1 < max && map[pos+1] == 0){
+				map[pos+1] = map[pos] + 1;
+				q.add(pos+1);
 			}
-			if(now*2<100001 && point[now*2] == 0) {
-				point[now*2] = point[now]+1;
-				q.offer(now*2);
+			if(pos * 2 < max && map[pos * 2] == 0){
+				map[pos * 2] = map[pos] + 1;
+				q.add(pos * 2);
 			}
 		}
+
 		return -1;
 	}
 }
