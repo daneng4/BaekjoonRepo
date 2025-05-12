@@ -1,45 +1,40 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int n = Integer.parseInt(br.readLine());
+		int[] arr = new int[n];
 
-    public static void main(String[] args) throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int n = Integer.parseInt(br.readLine());
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int[] arr = new int[n];
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		for(int i = 0; i<n; i++){
+			arr[i] = Integer.parseInt(st.nextToken());
+		}
 
-        for (int i = 0; i < n; i++) {
-            arr[i] = Integer.parseInt(st.nextToken());
-        }
+		Arrays.sort(arr);
+		int diff = Integer.MAX_VALUE;
+		int num1 = 0;
+		int num2 = 0;
 
-        Arrays.sort(arr);
-        int minDiff = Integer.MAX_VALUE;
-        int start = 0;
-        int end = arr.length - 1;
-        int answerA = 0;
-        int answerB = 0;
+		int left = 0;
+		int right = n-1;
+		while(left < right){
+			int sum = arr[left] + arr[right];
+			if(diff > Math.abs(sum)){
+				diff = Math.abs(sum);
+				num1 = arr[left];
+				num2 = arr[right];
 
-        while (start < end) {
-            int mid = arr[start] + arr[end];
-            if (Math.abs(mid) < minDiff) {
-                minDiff = Math.abs(mid);
-                answerA = arr[start];
-                answerB = arr[end];
+				if(diff == 0)
+					break;
+			}
+			if(sum < 0)
+				left++;
+			else
+				right--;
+		}
 
-                if (mid == 0) {
-                    break;
-                }
-            }
-            if (mid < 0) {
-                start++;
-            } else {
-                end--;
-            }
-        }
-
-        System.out.println(answerA + " " + answerB);
-    }
+		System.out.println(num1 + " " + num2);
+	}
 }
