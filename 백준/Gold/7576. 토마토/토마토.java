@@ -1,89 +1,60 @@
-
 import java.io.*;
 import java.util.*;
 
 public class Main {
-
-	static int map[][];
-	static boolean visit[][];
+	static int[][] map;
+	static Queue<int[]> q;
 	static int[] dx = {1,-1,0,0};
 	static int[] dy = {0,0,1,-1};
-	static Queue<int[]> q = new LinkedList<>();
-	static int n, m;
-	static int max = Integer.MIN_VALUE;
-	public static void main(String[] args) throws Exception  {
-		
+	public static void main(String[] args) throws IOException{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		
-		m = Integer.parseInt(st.nextToken());
-		n = Integer.parseInt(st.nextToken());
+
+		int m = Integer.parseInt(st.nextToken());
+		int n = Integer.parseInt(st.nextToken());
 		map = new int[n][m];
-		visit = new boolean[n][m];
-		
-		for(int i = 0; i<n; i++) {
+		q = new LinkedList<>();
+
+		for(int i = 0; i<n; i++){
 			st = new StringTokenizer(br.readLine());
-			for(int j = 0; j<m; j++) {
+			for(int j = 0; j<m; j++){
 				map[i][j] = Integer.parseInt(st.nextToken());
-				if(map[i][j] == 1) {
-					q.add(new int[] {i,j});
-				}
+				if(map[i][j] == 1)
+					q.add(new int[]{i,j});
 			}
 		}
 
-		tomato();
-		if(check()) {
-			System.out.println("-1");
-		}else {
-			getMax();
-			System.out.println(max);
-		}
-	}
-	
-	public static void tomato() {
-		
-		while(!q.isEmpty()) {
-			int[] now = q.poll();
-			int x = now[0];
-			int y = now[1];
-			for(int i = 0; i<4; i++) {
-				int nextX = x + dx[i];
-				int nextY = y + dy[i];
-				
-				if(nextX < 0 || nextY < 0 || nextX >= n || nextY >= m) {
+		while(!q.isEmpty()){
+			int[] cur = q.poll();
+			int cx = cur[0];
+			int cy = cur[1];
+
+			for(int i = 0; i<4; i++){
+				int nx = cx + dx[i];
+				int ny = cy + dy[i];
+
+				if(nx < 0 || ny < 0 || nx >= n || ny >= m)
 					continue;
-				}
-				if(map[nextX][nextY] == -1 || visit[nextX][nextY]) {
+				if(map[nx][ny] != 0)
 					continue;
-				}
-				
-				if(map[nextX][nextY] == 0) {
-					map[nextX][nextY] = map[x][y] + 1;
-					q.offer(new int[] {nextX, nextY});
-				}
-			}	
-		}
-		
-	}
-	
-	public static boolean check() {
-		for(int i = 0; i<n; i++) {
-			for(int j = 0; j<m; j++) {
-				if(map[i][j] == 0) {
-					return true;
-				}
+
+				q.add(new int[]{nx, ny});
+				map[nx][ny] = map[cx][cy] + 1;
 			}
 		}
-		return false;
-	}
-	
-	public static void getMax() {
-		for(int i = 0; i<n; i++) {
-			for(int j = 0; j<m; j++) {
-				if(max<map[i][j])
-					max = map[i][j];
+
+		int answer = 0;
+
+		for(int i = 0; i<n; i++){
+			for(int j = 0; j<m; j++){
+				if(map[i][j] == 0){
+					System.out.println("-1");
+					return;
+				}
+				answer = Math.max(answer, map[i][j]);
 			}
 		}
-		max = max-1;
+
+		System.out.println(answer-1);
 	}
 }
