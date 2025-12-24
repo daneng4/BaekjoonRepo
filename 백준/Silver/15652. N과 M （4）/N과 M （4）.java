@@ -1,38 +1,38 @@
-
 import java.io.*;
 import java.util.*;
 
 public class Main {
-
-	private static int[] arr;
-	private static boolean[] visit;
-	private static int n,m;
-	static StringBuilder sb = new StringBuilder();
-	public static void main(String[] args) throws Exception  {
+	static int[] arr;
+	static StringBuilder sb;
+	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		
-		n = Integer.parseInt(st.nextToken());
-		m = Integer.parseInt(st.nextToken());
-		arr = new int[m];
-		visit = new boolean[n];
-		dfs(0,0);
-		System.out.println(sb);
+		int N = Integer.parseInt(st.nextToken());
+		int M = Integer.parseInt(st.nextToken());
 		
+		arr = new int[M];
+		sb = new StringBuilder();
+		
+		solve(N, M, 0, 1);
+		
+		System.out.println(sb);
 	}
-	private static void dfs(int start, int depth) {
-		if(depth == m) {
-			for(int value : arr) {
-				sb.append(value).append(" ");
+	
+	public static void solve(int N, int M, int depth, int picked) {
+		if(depth == M) {
+			
+			for(int a : arr){
+				sb.append(a).append(" ");
 			}
+			
 			sb.append("\n");
 			return;
 		}
 		
-		for(int i = start; i<n; i++) {
-			arr[depth] = i+1;
-			dfs(i, depth+1);
+		for(int i = picked; i<=N; i++) {
+			arr[depth] = i;
+			solve(N, M, depth+1, i);
 		}
 	}
-	
 }
