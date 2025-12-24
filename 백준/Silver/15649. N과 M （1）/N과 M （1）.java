@@ -1,41 +1,46 @@
-
 import java.io.*;
 import java.util.*;
 
 public class Main {
-
-	private static int[] arr;
-	private static boolean[] visit;
-	static StringBuilder sb = new StringBuilder();
-	public static void main(String[] args) throws Exception  {
+	static int N;
+	static int M;
+	static int[] arr;
+	static boolean[] visit;
+	static StringBuilder sb;
+	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		
-		int n = Integer.parseInt(st.nextToken());
-		int m = Integer.parseInt(st.nextToken());
-		arr = new int[m];
-		visit = new boolean[n];
-		dfs(n, m, 0);
-		System.out.println(sb);
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
 		
+		arr = new int[N+1];
+		visit = new boolean[N+1];
+		sb = new StringBuilder();
+		
+		solve(1);
+		
+		System.out.println(sb);
 	}
-	private static void dfs(int n, int m, int depth) {
-		if(depth == m) {
-			for(int value : arr) {
-				sb.append(value).append(" ");
+	
+	public static void solve(int depth) {
+		if(depth == M+1) {
+			
+			for(int i = 1; i<=M; i++){
+				sb.append(arr[i] + " ");
 			}
+			
 			sb.append("\n");
 			return;
 		}
 		
-		for(int i = 0; i<n; i++) {
-			if(!visit[i]) {
-				visit[i] = true;
-				arr[depth] = i+1;
-				dfs(n,m,depth+1);
-				visit[i] = false;
-			}
+		for(int i = 1; i<=N; i++) {
+			if(visit[i]) continue;
+			
+			arr[depth] = i;
+			visit[i] = true;
+			solve(depth+1);
+			visit[i] = false;
 		}
 	}
-	
 }
