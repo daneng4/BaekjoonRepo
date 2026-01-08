@@ -12,16 +12,16 @@ public class Main {
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int first = Integer.parseInt(st.nextToken());
 
-		Arrays.fill(dp, Integer.MIN_VALUE);
+		Arrays.fill(dp, -1);
 		
 		dp[first] = 0; // 꽃을 하나만 고른 경우, 인접한 꽃이 없어서 0
 		
 		for(int i = 1; i<N; i++) {
 			int cur = Integer.parseInt(st.nextToken());
-			int best = Integer.MIN_VALUE;
+			int best = -1;
 			
 			for(int pre = 1; pre<=100; pre++) {
-				if(dp[pre] != Integer.MIN_VALUE) {
+				if(dp[pre] != -1) {
 					int val = dp[pre] + (cur - pre) * (cur - pre);
 					best = Math.max(val, best);
 				}
