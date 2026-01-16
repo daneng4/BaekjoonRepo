@@ -1,35 +1,42 @@
-
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 public class Main {
 
 	public static void main(String[] args) throws Exception {
-		
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		String[] s = br.readLine().split("");
 		
-		Map<String, Integer> map = new HashMap<>();
+		String str = br.readLine();
+		str = str.toLowerCase();
 		
-		for(int i = 0; i<s.length; i++) {
-			String us = s[i].toUpperCase();
-			map.put(us, map.getOrDefault(us, 0) + 1);
+		HashMap<Character, Integer> map = new HashMap<>();
+		
+		for(int i = 0; i<str.length(); i++) {
+			char c = str.charAt(i);
+			map.put(c, map.getOrDefault(c, 0) + 1);
 		}
 		
-		List<String> keyset = new ArrayList<>(map.keySet());
-		keyset.sort((o1, o2) -> map.get(o2).compareTo(map.get(o1)));
-		
-		if(map.size() == 1) {
-			System.out.println(keyset.get(0));
-			return;
+		int max = 0;
+		for(Character s : map.keySet()) {
+			int value = map.get(s);
+			max = Math.max(value, max);
 		}
 		
-		int o = map.get(keyset.get(0));
-		int t = map.get(keyset.get(1));
-		if(o == t)
-			System.out.println("?");
-		else
-			System.out.println(keyset.get(0));
-			
+		int count = 0;
+		String maxAlpha = "";
+		for(Character s : map.keySet()) {
+			if(max == map.get(s)) {
+				if(count != 0) {
+					System.out.println("?");
+					return;
+				}
+				
+				count++;
+				maxAlpha = String.valueOf(s);
+			}
+		}
+		
+		System.out.println(maxAlpha.toUpperCase());
 	}
+
 }
