@@ -1,48 +1,49 @@
 import java.util.*;
 import java.io.*;
 
-public class Main {
-	static boolean[][] visit;
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-
-		int n = Integer.parseInt(st.nextToken());
-		int m = Integer.parseInt(st.nextToken());
-
-		visit = new boolean[n+1][n+1];
-
-		for(int i = 0; i<m; i++){
-			st = new StringTokenizer(br.readLine());
-			int a = Integer.parseInt(st.nextToken());
-			int b = Integer.parseInt(st.nextToken());
-			visit[a][b] = true;
-		}
-
-		for(int k= 1; k<=n; k++){
-			for(int i = 1; i<=n; i++){
-				for(int j = 1; j<=n; j++){
-					if(visit[i][k] && visit[k][j]){
-						visit[i][j] = true;
-					}
-				}
-			}
-		}
-
-		int[] count = new int[n+1];
-		for(int i = 1; i<=n; i++) {
-			for(int j = 1; j<=n; j++) {
-				if(visit[i][j] || visit[j][i])
-					count[i]++;
-			}
-		}
-
-		int result = 0;
-		for(int i = 1; i<=n; i++) {
-			if(count[i] == n-1)
-				result++;
-		}
-
-		System.out.println(result);
-	}
+class Main {
+	
+    public static void main(String[] args) throws Exception {
+    	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    	StringTokenizer st = new StringTokenizer(br.readLine());
+    	
+    	int N = Integer.parseInt(st.nextToken());
+    	int M = Integer.parseInt(st.nextToken());
+    	
+    	boolean[][] taller = new boolean[N+1][N+1];
+    	
+    	for(int i = 0; i<M; i++) {
+    		st = new StringTokenizer(br.readLine());
+    		
+    		int a = Integer.parseInt(st.nextToken());
+    		int b = Integer.parseInt(st.nextToken());
+    		
+    		taller[a][b] = true;
+    	}
+    	
+    	for(int k = 1; k<=N; k++) {
+    		for(int i = 1; i<=N; i++) {
+    			for(int j = 1; j<=N; j++) {
+    				if(taller[i][k] && taller[k][j]) {
+    					taller[i][j] = true;
+    				}
+    			}
+    		}
+    	}
+    	
+    	int answer = 0;
+    	for(int i = 1; i<=N; i++) {
+    		int count = 0;
+    		
+    		for(int j = 1; j<=N; j++) {
+    			if(taller[i][j] || taller[j][i])
+    				count++;
+    		}
+    		
+    		if(count == N-1)
+    			answer++;
+    	}
+    	
+    	System.out.println(answer);
+    }
 }
