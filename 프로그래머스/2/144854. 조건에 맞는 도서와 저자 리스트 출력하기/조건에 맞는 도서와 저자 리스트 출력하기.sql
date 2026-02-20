@@ -1,6 +1,5 @@
--- 코드를 입력하세요
-SELECT BOOK_ID, AUTHOR_NAME, DATE_FORMAT(PUBLISHED_DATE, '%Y-%m-%d') AS PUBLISHED_DATE
-FROM BOOK AS B LEFT JOIN AUTHOR AS A
-ON B.AUTHOR_ID = A.AUTHOR_ID
-WHERE B.CATEGORY LIKE '경제'
-ORDER BY PUBLISHED_DATE;
+-- 코드를 입력하세요 저자 id fk로
+SELECT b.book_id, a.author_name, date_format(b.published_date, '%Y-%m-%d') as published_date
+from book b join author a
+where b.author_id = a.author_id and b.category = '경제'
+order by published_date
