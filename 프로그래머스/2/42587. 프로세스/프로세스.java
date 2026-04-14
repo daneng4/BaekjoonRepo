@@ -2,44 +2,46 @@ import java.util.*;
 
 class Solution {
     public int solution(int[] priorities, int location) {
-        int answer = 1;
-        Queue<Prior> queue = new LinkedList<>();
-        Integer[] values = new Integer[priorities.length];
+        ArrayList<Integer> prior = new ArrayList<>();
+        Queue<Process> q = new ArrayDeque<>();
         
         for(int i = 0; i<priorities.length; i++){
-            values[i] = priorities[i];
-            
-            if(location == i){
-                queue.add(new Prior(priorities[i], true));
-            }else{
-                queue.add(new Prior(priorities[i], false));
-            }
+            prior.add(priorities[i]);
+            q.add(new Process(priorities[i], i));
         }
         
-        Arrays.sort(values, (a,b) -> b-a );
+        Collections.sort(prior, Collections.reverseOrder());
+        
         int idx = 0;
+        int count = 1;
         
-        while(!queue.isEmpty()){
-            Prior poll = queue.poll();
-            if(poll.target && poll.p == values[idx]) 
-            	break;
-            else if(poll.p == values[idx]){
-            	if(idx < values.length)
-            		idx += 1;
-                answer += 1;
-                continue;
+        while(true){
+            Process process = q.peek();
+            
+            // 우선순위가 현재 우선순위와 맞다면 poll
+            if(prior.get(idx) == process.prior){
+                q.poll();
+                idx++;
+                
+                if(location == process.location){
+                    break;
+                }
+                
+                count++;
+            }else{
+                q.add(q.poll());
             }
-            queue.add(poll);
         }
         
-        return answer;
+        return count;
     }
 }
-class Prior {
-    int p;
-    boolean target;
-    public Prior(int p, boolean target){
-        this.p = p;
-        this.target = target;
+class Process {
+    int prior;
+    int location;
+    
+    public Process(int prior, int location){
+        this.prior = prior;
+        this.location = location;
     }
 }
